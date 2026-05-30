@@ -2854,7 +2854,7 @@ function toggleVolumeMeasures(){
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDX94WoPQp8VD377U-6K4n4g5OvT5Vr2vc",
@@ -2867,8 +2867,22 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
+async function syncFirebase(){
+  await setDoc(doc(db,"criyodareef","datos"),{
+    records,
+    waterChanges,
+    clariseaChanges,
+    resinChanges,
+    icpRecords,
+    maintenanceTasks,
+    fishList,
+    coralList,
+    invertList,
+    aquariumVolume
+  });
+}
 window.db = db;
+window.syncFirebase = syncFirebase;
 console.log("Firebase conectado");
 </script>
 </body>
