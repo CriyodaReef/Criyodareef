@@ -2852,6 +2852,24 @@ function toggleVolumeMeasures(){
   });
 }
 </script>
-  
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDX94WoPQp8VD377U-6K4n4g5OvT5Vr2vc",
+  authDomain: "criyodareef.firebaseapp.com",
+  projectId: "criyodareef",
+  storageBucket: "criyodareef.firebasestorage.app",
+  messagingSenderId: "202454684001",
+  appId: "1:202454684001:web:2fdfa6a0336624120d3520"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.db = db;
+console.log("Firebase conectado");
+</script>
 </body>
 </html>
