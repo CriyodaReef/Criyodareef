@@ -7,7 +7,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CriyodaReef">
 <meta name="theme-color" content="#0a1628">
-<link rel="manifest" href="manifest.json">
 <title>🪸 CriyodaReef</title>
 <!-- V30: ICP entre Gráficas e Historial + cambios de agua y resinas en Mantenimiento -->
 <style>
@@ -1469,39 +1468,17 @@ function load(){
     }
   }catch{aquariumVolume=380}
 }
-function saveRec(){
-  localStorage.setItem(SK,JSON.stringify(records));
-  window.syncFirebase(); 
-function saveWC(){
-  localStorage.setItem(WK,JSON.stringify(waterChanges));
-  window.syncFirebase();
-function saveClariSea(){
-localStorage.setItem(CLK,JSON.stringify(clariseaChanges));
-  window.syncFirebase();
-function saveResins(){
-localStorage.setItem(RK,JSON.stringify(resinChanges));
-  window.syncFirebase();
-function saveICPs(){
-localStorage.setItem(ICPK,JSON.stringify(icpRecords));
-  window.syncFirebase();
-function saveTasks(){
-localStorage.setItem(TK,JSON.stringify(maintenanceTasks));
-  window.syncFirebase();
-function saveFish(){
- localStorage.setItem(FK,JSON.stringify(fishList));
-  window.syncFirebase();
-function saveCoral(){
-localStorage.setItem(CK,JSON.stringify(coralList));
-  window.syncFirebase();
-function saveInvert(){
-    localStorage.setItem(IK,JSON.stringify(invertList));
-  window.syncFirebase();
+function saveRec(){localStorage.setItem(SK,JSON.stringify(records))}
+function saveWC(){localStorage.setItem(WK,JSON.stringify(waterChanges))}
+function saveClariSea(){localStorage.setItem(CLK,JSON.stringify(clariseaChanges))}
+function saveResins(){localStorage.setItem(RK,JSON.stringify(resinChanges))}
+function saveICPs(){localStorage.setItem(ICPK,JSON.stringify(icpRecords))}
+function saveTasks(){localStorage.setItem(TK,JSON.stringify(maintenanceTasks))}
+function saveFish(){localStorage.setItem(FK,JSON.stringify(fishList))}
+function saveCoral(){localStorage.setItem(CK,JSON.stringify(coralList))}
+function saveInvert(){localStorage.setItem(IK,JSON.stringify(invertList))}
 function saveAquariumVolume(){
- localStorage.setItem(VK,JSON.stringify({
-    volume:aquariumVolume,
-    measures:aquariumMeasureData
-  }));
-  window.syncFirebase();
+  localStorage.setItem(VK,JSON.stringify({volume:aquariumVolume,measures:aquariumMeasureData}));
 }
 function setInputVal(id,val){
   const el=document.getElementById(id);
@@ -2865,47 +2842,5 @@ function toggleVolumeMeasures(){
 }
 </script>
 
-  <script>
-    if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(reg => console.log('Service Worker registrado'))
-      .catch(err => console.log('Error SW:', err));
-  });
-}
-</script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDX94WoPQp8VD377U-6K4n4g5OvT5Vr2vc",
-  authDomain: "criyodareef.firebaseapp.com",
-  projectId: "criyodareef",
-  storageBucket: "criyodareef.firebasestorage.app",
-  messagingSenderId: "202454684001",
-  appId: "1:202454684001:web:2fdfa6a0336624120d3520"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-async function syncFirebase(){
-  await setDoc(doc(db,"criyodareef","datos"),{
-    records,
-    waterChanges,
-    clariseaChanges,
-    resinChanges,
-    icpRecords,
-    maintenanceTasks,
-    fishList,
-    coralList,
-    invertList,
-    aquariumVolume
-  });
-}
-window.db = db;
-window.syncFirebase = syncFirebase;
-console.log("Firebase conectado");
-</script>
 </body>
 </html>
