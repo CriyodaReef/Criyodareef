@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CriyodaReef">
 <meta name="theme-color" content="#0a1628">
+<link rel="manifest" href="manifest.json">
 <title>🪸 CriyodaReef</title>
 <!-- V30: ICP entre Gráficas e Historial + cambios de agua y resinas en Mantenimiento -->
 <style>
@@ -2842,5 +2843,15 @@ function toggleVolumeMeasures(){
 }
 </script>
 
+  <script>
+    if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => console.log('Service Worker registrado'))
+      .catch(err => console.log('Error SW:', err));
+  });
+}
+</script>
+  
 </body>
 </html>
