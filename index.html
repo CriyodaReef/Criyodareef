@@ -7,8 +7,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CriyodaReef">
 <meta name="theme-color" content="#0a1628">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icono-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icono-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icono-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icono-512.png">
 <title>🪸 CriyodaReef</title>
@@ -673,6 +673,292 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
   .org-delete-tab{right:8px}
 }
 
+
+
+
+/* ── V47 · Acciones rápidas en historial calendario ── */
+.history-action-panel{
+  margin-top:12px;
+  border:1px solid rgba(14,165,233,.35);
+  background:linear-gradient(180deg,rgba(14,165,233,.08),rgba(2,8,23,.34));
+  border-radius:18px;
+  padding:14px;
+}
+.history-action-title{
+  font-size:13px;
+  font-weight:800;
+  color:#bff3ff;
+  margin-bottom:8px;
+}
+.history-action-sub{
+  font-size:11px;
+  color:#94a3b8;
+  line-height:1.5;
+  margin-bottom:10px;
+}
+.history-record-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 0;
+  border-top:1px solid rgba(125,211,252,.12);
+}
+.history-record-row:first-of-type{border-top:0}
+.history-record-info b{
+  display:block;
+  color:#f8fafc;
+  font-size:13px;
+  font-family:var(--mono);
+}
+.history-record-info span{
+  display:block;
+  color:#94a3b8;
+  font-size:11px;
+  margin-top:3px;
+}
+.history-record-actions{
+  display:flex;
+  gap:7px;
+  flex-shrink:0;
+}
+.history-edit-btn,.history-delete-btn,.history-back-btn{
+  border:1px solid rgba(148,163,184,.22);
+  background:rgba(2,8,23,.42);
+  color:#e2e8f0;
+  border-radius:12px;
+  padding:8px 10px;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+  font-family:var(--font);
+}
+.history-edit-btn{color:#7dd3fc;border-color:rgba(14,165,233,.35)}
+.history-delete-btn{color:#fecaca;border-color:rgba(239,68,68,.35)}
+.history-back-btn{color:#fbbf24;border-color:rgba(245,158,11,.35)}
+.history-confirm{
+  margin-top:10px;
+  border:1px solid rgba(239,68,68,.35);
+  background:rgba(127,29,29,.18);
+  border-radius:16px;
+  padding:12px;
+}
+.history-confirm-title{
+  font-size:12px;
+  font-weight:800;
+  color:#fecaca;
+  margin-bottom:10px;
+}
+.record-cal-day.has-record{
+  cursor:pointer;
+}
+.record-cal-day.has-record:hover{
+  border-color:#7dd3fc;
+  box-shadow:0 0 0 3px rgba(14,165,233,.10);
+}
+.editing-record-banner{
+  margin-bottom:12px;
+  border:1px solid rgba(245,158,11,.35);
+  background:rgba(245,158,11,.10);
+  border-radius:16px;
+  padding:12px;
+  color:#fef3c7;
+  font-size:12px;
+  line-height:1.5;
+}
+@media(max-width:520px){
+  .history-record-row{align-items:flex-start;flex-direction:column}
+  .history-record-actions{width:100%}
+  .history-edit-btn,.history-delete-btn,.history-back-btn{flex:1;text-align:center}
+}
+
+
+
+/* ── V48 · Historial más limpio y ClariSea por fecha ── */
+.history-record-info span.history-hidden-values{display:none!important}
+.history-record-info .history-time-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(2,8,23,.38);
+  border:1px solid rgba(125,211,252,.16);
+  color:#e0faff;
+  font-size:12px;
+  font-family:var(--mono);
+}
+.history-action-panel.compact .history-action-sub{margin-bottom:6px}
+.history-action-panel.compact .history-record-row{padding:9px 0}
+.clarisea-date-group{
+  border:1px solid rgba(249,115,22,.24);
+  background:rgba(2,8,23,.28);
+  border-radius:18px;
+  padding:12px;
+  margin-bottom:10px;
+}
+.clarisea-date-title{
+  color:#fed7aa;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:8px;
+  text-transform:capitalize;
+}
+.clarisea-date-entry{
+  border-top:1px solid rgba(249,115,22,.14);
+  padding-top:9px;
+  margin-top:9px;
+}
+.clarisea-date-entry:first-of-type{border-top:0;padding-top:0;margin-top:0}
+
+
+
+/* ── V49 · Historiales en calendarios lado a lado ── */
+.history-calendars-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  align-items:start;
+}
+.history-calendar-card{
+  margin-bottom:0!important;
+}
+.history-calendar-card .record-cal-day{
+  min-height:52px;
+}
+.history-calendar-card .record-cal-title{
+  font-size:12px;
+}
+.clarisea-cal-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#f97316;
+  display:inline-block;
+  margin-right:5px;
+}
+.record-cal-day.has-clarisea{
+  background:linear-gradient(180deg,rgba(249,115,22,.22),rgba(249,115,22,.07))!important;
+  border-color:#f97316!important;
+  color:#fff7ed!important;
+  font-weight:800;
+}
+.record-cal-day.has-clarisea::after{
+  content:'';position:absolute;bottom:5px;width:5px;height:5px;border-radius:50%;background:#f97316;
+}
+.clarisea-action-panel{
+  margin-top:12px;
+  border:1px solid rgba(249,115,22,.34);
+  background:linear-gradient(180deg,rgba(249,115,22,.09),rgba(2,8,23,.34));
+  border-radius:18px;
+  padding:14px;
+}
+.clarisea-action-title{
+  font-size:13px;
+  font-weight:800;
+  color:#fed7aa;
+  margin-bottom:8px;
+  text-transform:capitalize;
+}
+.clarisea-action-sub{
+  font-size:11px;
+  color:#94a3b8;
+  margin-bottom:10px;
+}
+.clarisea-record-row{
+  padding:10px 0;
+  border-top:1px solid rgba(249,115,22,.14);
+}
+.clarisea-record-row:first-of-type{border-top:0}
+@media(max-width:900px){
+  .history-calendars-grid{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+  .history-calendar-card .record-cal-day{min-height:46px}
+}
+
+
+/* ── V52 · Historial de peces eliminados ── */
+.deleted-fish-card{
+  margin-top:16px!important;
+  border-color:rgba(34,197,94,.24)!important;
+}
+.deleted-fish-list{display:flex;flex-direction:column;gap:10px}
+.deleted-fish-row{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:11px 12px;
+  border-radius:16px;
+  background:rgba(2,8,23,.34);
+  border:1px solid rgba(125,211,252,.14);
+}
+.deleted-fish-img{
+  width:50px;height:50px;border-radius:12px;object-fit:cover;
+  background:rgba(2,8,23,.44);border:1px solid rgba(125,211,252,.16);
+}
+.deleted-fish-info b{display:block;color:#f8fafc;font-size:13px}
+.deleted-fish-info span{display:block;color:#94a3b8;font-size:11px;margin-top:3px}
+.deleted-fish-recover{
+  border:1px solid rgba(34,197,94,.35);
+  background:rgba(34,197,94,.12);
+  color:#86efac;
+  border-radius:12px;
+  padding:8px 10px;
+  font-size:11px;
+  font-weight:800;
+  cursor:pointer;
+  font-family:var(--font);
+}
+@media(max-width:520px){
+  .deleted-fish-row{grid-template-columns:auto 1fr}
+  .deleted-fish-recover{grid-column:1/-1;width:100%}
+}
+
+
+/* ── V54 · Historial peces oculto con desplegable ── */
+.deleted-toggle-btn{
+  width:100%;
+  margin:10px 0 0;
+  padding:11px 14px;
+  border-radius:14px;
+  border:1px solid rgba(14,165,233,.35);
+  background:rgba(2,8,23,.36);
+  color:#7dd3fc;
+  font-size:12px;
+  font-weight:800;
+  font-family:var(--font);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.deleted-toggle-btn:active{transform:scale(.98)}
+.deleted-toggle-arrow{font-size:16px;transition:transform .2s}
+.deleted-toggle-arrow.open{transform:rotate(180deg)}
+.deleted-fish-collapsible{display:none;margin-top:12px}
+.deleted-fish-collapsible.open{display:flex}
+
+/* ── V46 · Copias de seguridad Exportar / Importar ── */
+.backup-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.backup-actions .btn-outline{justify-content:center;text-align:center}
+.backup-note{font-size:11px;color:#94a3b8;line-height:1.6;margin-top:10px}
+@media(max-width:520px){.backup-actions{grid-template-columns:1fr}}
+
+
+/* ── V58 · ICP dentro de Historial ── */
+.icp-history-access-card{
+  background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(14,165,233,.08))!important;
+  border-color:rgba(167,139,250,.25)!important;
+}
+.icp-history-access-btn{
+  width:100%;
+  justify-content:center;
+  margin-top:4px;
+}
+
 </style>
 </head>
 <body>
@@ -688,7 +974,7 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
       </div>
       <div class="header-actions">
         <div class="last-card"><span class="last-icon">💧</span><div><b id="last-update-txt">Sin registros aún</b><small>Último registro</small></div></div>
-        <button class="new-record-btn" onclick="showTab('add')">⊕ Nuevo registro</button>
+        <button class="new-record-btn" onclick="showNewParameterRecord()">⊕ Nuevo registro</button>
       </div>
     </div>
   </div>
@@ -699,7 +985,7 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
     <button class="nav-btn" onclick="showTab('tasks')" id="tab-tasks"><span class="nav-icon">🧽</span>Mant.</button>
     <button class="nav-btn" onclick="showTab('balling')" id="tab-balling"><span class="nav-icon">⚗️</span>Balling</button>
     <button class="nav-btn" onclick="showTab('charts')" id="tab-charts"><span class="nav-icon">📈</span>Gráficas</button>
-    <button class="nav-btn" onclick="showTab('icp')" id="tab-icp"><span class="nav-icon">🧪</span>ICP</button>
+    <button class="nav-btn" style="display:none" onclick="showTab('icp')" id="tab-icp"><span class="nav-icon">🧪</span>ICP</button>
     <button class="nav-btn" onclick="showTab('history')" id="tab-history"><span class="nav-icon">📋</span>Historial</button>
     <button class="nav-btn" onclick="showTab('fish')" id="tab-fish"><span class="nav-icon">🐠</span>Peces</button>
     <button class="nav-btn" onclick="showTab('coral')" id="tab-coral"><span class="nav-icon">🪸</span>Corales</button>
@@ -795,6 +1081,7 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
 
     <!-- REGISTRAR -->
     <div class="section" id="sec-add">
+      <div id="editing-record-banner" style="display:none"></div>
       <div class="datetime-card">
         <div class="datetime-icon">📅</div>
         <div class="datetime-inner">
@@ -855,6 +1142,17 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
           <div class="balling-field"><label>Volumen acuario (L)</label><input type="number" id="bf-vol" value="380" placeholder="380" inputmode="decimal" oninput="setAquariumVolumeFromConfig()"></div>
           <div class="balling-field"><label>Horas del período</label><input type="number" id="bf-hours" placeholder="24" inputmode="decimal" oninput="calcAllBallingFull()"></div>
         </div>
+      </div>
+
+      <div class="card balling-shared-card">
+        <div class="card-title">💾 Copia de seguridad</div>
+        <div class="sub">Guarda o restaura todos los datos de CriyodaReef: mediciones, peces, corales, invertebrados, tareas, ICP, cambios de agua, resinas, ClariSea, rangos y volumen.</div>
+        <div class="backup-actions">
+          <button class="btn-outline" onclick="exportBackup()">⬇️ Exportar copia</button>
+          <button class="btn-outline" onclick="document.getElementById('backup-import-file').click()">📂 Importar copia</button>
+        </div>
+        <input type="file" id="backup-import-file" accept="application/json,.json" style="display:none" onchange="importBackup(event)">
+        <div class="backup-note">Consejo: guarda el archivo en iCloud Drive o Google Drive para poder restaurarlo desde iPhone, iPad o Mac.</div>
       </div>
 
       <!-- Triton Core7 daily dose -->
@@ -1040,12 +1338,18 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
 
     <!-- HISTORIAL -->
     <div class="section" id="sec-history">
+      <div class="card icp-history-access-card">
+        <div class="card-title">🧪 Historial ICP</div>
+        <p class="sub">Acceso a los registros y controles ICP desde Historial, manteniendo la sección ICP original sin cambios.</p>
+        <button class="btn-outline icp-history-access-btn" onclick="showTab('icp')">Abrir ICP</button>
+      </div>
+
       <div class="toolbar">
         <span class="toolbar-left" id="hist-count">0 registros</span>
         <button class="btn-outline" onclick="exportCSV()">⬇ Exportar CSV</button>
       </div>
       <div class="card hist-filter-card">
-        <div class="card-title" style="margin-bottom:10px">🔎 Filtrar historial</div>
+        <div class="card-title" style="margin-bottom:10px">🔎 Filtrar historial de parámetros</div>
         <div class="hist-filter-grid">
           <div class="field"><label>Desde</label><input type="date" id="hist-from" onchange="renderHistory()"></div>
           <div class="field"><label>Hasta</label><input type="date" id="hist-to" onchange="renderHistory()"></div>
@@ -1053,23 +1357,61 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
           <button class="btn-outline" onclick="clearHistoryFilters()">Limpiar</button>
         </div>
       </div>
-      <div class="card history-calendar-only">
-        <div class="card-title" style="margin-bottom:12px">📅 Historial de registros</div>
-        <p class="sub">Solo calendario: se marcan los días que tienen mediciones registradas.</p>
-        <div id="hist-list"><div class="empty"><span class="empty-icon">📋</span><p>El historial está vacío.</p></div></div>
+
+      <div class="history-calendars-grid">
+        <div class="card history-calendar-only history-calendar-card">
+          <div class="card-title" style="margin-bottom:12px">📅 Calendario de parámetros</div>
+          <p class="sub">Pulsa una fecha marcada para editar o eliminar el registro de ese día.</p>
+          <div id="hist-list"><div class="empty"><span class="empty-icon">📋</span><p>El historial está vacío.</p></div></div>
+        </div>
+
+        <div class="card history-calendar-only history-calendar-card">
+          <div class="card-title" style="margin-bottom:12px">🧻 Calendario ClariSea SK-3000</div>
+          <p class="sub">Pulsa una fecha marcada para ver los cambios del filtro automático.</p>
+          <div class="clarisea-summary" id="clarisea-summary-charts">
+            <div class="clarisea-stat"><small>Último cambio</small><b>—</b></div>
+            <div class="clarisea-stat"><small>Días desde cambio</small><b>—</b></div>
+            <div class="clarisea-stat"><small>Duración media</small><b>—</b></div>
+          </div>
+          <div id="clarisea-history-list-charts" style="margin-top:14px">
+            <div class="empty" style="padding:20px"><span class="empty-icon" style="font-size:28px">🧻</span><p>Sin cambios del ClariSea registrados aún.</p></div>
+          </div>
+        </div>
       </div>
 
-      <!-- ClariSea SK-3000 automatic filter roll history moved to Historial -->
-      <div class="card" style="margin-top:16px">
-        <div class="card-title" style="margin-bottom:12px">📈 Historial del filtro automático ClariSea SK-3000</div>
-        <p class="sub">Historial y estadísticas de los cambios registrados en Mantenimiento.</p>
-        <div class="clarisea-summary" id="clarisea-summary-charts">
-          <div class="clarisea-stat"><small>Último cambio</small><b>—</b></div>
-          <div class="clarisea-stat"><small>Días desde cambio</small><b>—</b></div>
-          <div class="clarisea-stat"><small>Duración media</small><b>—</b></div>
+      <div class="card deleted-fish-card">
+        <div class="card-title" style="margin-bottom:12px">🐟 Peces eliminados</div>
+        <p class="sub">Esta ventana queda oculta. Ábrela solo cuando quieras revisar o recuperar peces eliminados.</p>
+        <button class="deleted-toggle-btn" onclick="toggleDeletedAnimalHistory('fish')">
+          <span>Ver peces eliminados</span>
+          <span id="deleted-fish-toggle-arrow" class="deleted-toggle-arrow">⌄</span>
+        </button>
+        <div id="deleted-fish-history" class="deleted-fish-list deleted-fish-collapsible">
+          <div class="empty" style="padding:20px"><span class="empty-icon" style="font-size:28px">🐟</span><p>No hay peces eliminados.</p></div>
         </div>
-        <div id="clarisea-history-list-charts" style="margin-top:14px">
-          <div class="empty" style="padding:20px"><span class="empty-icon" style="font-size:28px">🧻</span><p>Sin cambios del ClariSea registrados aún.</p></div>
+      </div>
+
+      <div class="card deleted-fish-card">
+        <div class="card-title" style="margin-bottom:12px">🪸 Corales eliminados</div>
+        <p class="sub">Esta ventana queda oculta. Ábrela solo cuando quieras revisar o recuperar corales eliminados.</p>
+        <button class="deleted-toggle-btn" onclick="toggleDeletedAnimalHistory('coral')">
+          <span>Ver corales eliminados</span>
+          <span id="deleted-coral-toggle-arrow" class="deleted-toggle-arrow">⌄</span>
+        </button>
+        <div id="deleted-coral-history" class="deleted-fish-list deleted-fish-collapsible">
+          <div class="empty" style="padding:20px"><span class="empty-icon" style="font-size:28px">🪸</span><p>No hay corales eliminados.</p></div>
+        </div>
+      </div>
+
+      <div class="card deleted-fish-card">
+        <div class="card-title" style="margin-bottom:12px">🦐 Invertebrados eliminados</div>
+        <p class="sub">Esta ventana queda oculta. Ábrela solo cuando quieras revisar o recuperar invertebrados eliminados.</p>
+        <button class="deleted-toggle-btn" onclick="toggleDeletedAnimalHistory('invert')">
+          <span>Ver invertebrados eliminados</span>
+          <span id="deleted-invert-toggle-arrow" class="deleted-toggle-arrow">⌄</span>
+        </button>
+        <div id="deleted-invert-history" class="deleted-fish-list deleted-fish-collapsible">
+          <div class="empty" style="padding:20px"><span class="empty-icon" style="font-size:28px">🦐</span><p>No hay invertebrados eliminados.</p></div>
         </div>
       </div>
     </div>
@@ -1301,7 +1643,7 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 <script>
-const SK='criyoda-reef-v1', FK='criyoda-fish-v1', CK='criyoda-coral-v1', IK='criyoda-invert-v1', WK='criyoda-wc-v1', CLK='criyoda-clarisea-v1', RK='criyoda-resins-v1', ICPK='criyoda-icp-v1', TK='criyoda-maint-tasks-v1', VK='criyoda-aquarium-volume-v1';
+const SK='criyoda-reef-v1', FK='criyoda-fish-v1', CK='criyoda-coral-v1', IK='criyoda-invert-v1', WK='criyoda-wc-v1', CLK='criyoda-clarisea-v1', RK='criyoda-resins-v1', ICPK='criyoda-icp-v1', TK='criyoda-maint-tasks-v1', VK='criyoda-aquarium-volume-v1', DFK='criyoda-deleted-fish-v1', DCK='criyoda-deleted-coral-v1', DIK='criyoda-deleted-invert-v1';
 
 const PARAMS=[
   {id:'temp',label:'Temp',    unit:'°C', min:24,  max:26,  warn:.5,  dec:1},
@@ -1445,11 +1787,12 @@ const DEFAULT_INVERT=[
   }
 ];
 
-let records=[], fishList=[], coralList=[], invertList=[];
+let records=[], fishList=[], coralList=[], invertList=[], deletedFishList=[], deletedCoralList=[], deletedInvertList=[];
 let aquariumVolume=380, aquariumMeasureData={tank:{l:'',w:'',h:''},sump:{l:'',w:'',h:''}};
 let recordCalendarDate=new Date();
 let histCalendarDate=new Date();
-let chart=null, activeParam='temp', editingId=null;
+let clariseaCalendarDate=new Date();
+let chart=null, activeParam='temp', editingId=null, editingRecordId=null, editingClariSeaId=null;
 
 let waterChanges=[], clariseaChanges=[], resinChanges=[], icpRecords=[], maintenanceTasks=[];
 function load(){
@@ -1460,6 +1803,9 @@ function load(){
   try{icpRecords=JSON.parse(localStorage.getItem(ICPK)||'[]')}catch{icpRecords=[]}
   try{maintenanceTasks=JSON.parse(localStorage.getItem(TK)||'[]')}catch{maintenanceTasks=[]}
   try{fishList=JSON.parse(localStorage.getItem(FK)||'null')||JSON.parse(JSON.stringify(DEFAULT_FISH))}catch{fishList=JSON.parse(JSON.stringify(DEFAULT_FISH))}
+  try{deletedFishList=JSON.parse(localStorage.getItem(DFK)||'[]')}catch{deletedFishList=[]}
+  try{deletedCoralList=JSON.parse(localStorage.getItem(DCK)||'[]')}catch{deletedCoralList=[]}
+  try{deletedInvertList=JSON.parse(localStorage.getItem(DIK)||'[]')}catch{deletedInvertList=[]}
   try{coralList=JSON.parse(localStorage.getItem(CK)||'null')||JSON.parse(JSON.stringify(DEFAULT_CORAL))}catch{coralList=JSON.parse(JSON.stringify(DEFAULT_CORAL))}
   try{invertList=JSON.parse(localStorage.getItem(IK)||'null')||JSON.parse(JSON.stringify(DEFAULT_INVERT))}catch{invertList=JSON.parse(JSON.stringify(DEFAULT_INVERT))}
   try{
@@ -1479,6 +1825,9 @@ function saveResins(){localStorage.setItem(RK,JSON.stringify(resinChanges))}
 function saveICPs(){localStorage.setItem(ICPK,JSON.stringify(icpRecords))}
 function saveTasks(){localStorage.setItem(TK,JSON.stringify(maintenanceTasks))}
 function saveFish(){localStorage.setItem(FK,JSON.stringify(fishList))}
+function saveDeletedFish(){localStorage.setItem(DFK,JSON.stringify(deletedFishList))}
+function saveDeletedCoral(){localStorage.setItem(DCK,JSON.stringify(deletedCoralList))}
+function saveDeletedInvert(){localStorage.setItem(DIK,JSON.stringify(deletedInvertList))}
 function saveCoral(){localStorage.setItem(CK,JSON.stringify(coralList))}
 function saveInvert(){localStorage.setItem(IK,JSON.stringify(invertList))}
 function saveAquariumVolume(){
@@ -1492,6 +1841,48 @@ function getNum(id){
   const el=document.getElementById(id);
   const n=parseFloat((el?.value||'').replace(',','.'));
   return isNaN(n)?0:n;
+}
+
+/* ── V56 · Mantener últimos parámetros en el formulario ── */
+function fillParameterFormFromRecord(record, keepNotes=false){
+  if(!record) return;
+  PARAMS.forEach(p=>{
+    const input=document.getElementById('f-'+p.id);
+    if(input && record[p.id]!==undefined && record[p.id]!==null) input.value=record[p.id];
+  });
+  const notes=document.getElementById('f-notes');
+  if(notes && keepNotes) notes.value=record.notes||'';
+}
+function loadLatestParameterValues(){
+  if(editingRecordId) return;
+  const latest=[...records]
+    .sort((a,b)=>new Date(b.date)-new Date(a.date))
+    .find(r=>PARAMS.some(p=>r[p.id]!==undefined && r[p.id]!==null));
+  if(latest) fillParameterFormFromRecord(latest,false);
+  const notes=document.getElementById('f-notes');
+  if(notes) notes.value='';
+}
+
+function clearParameterFormForNewRecord(){
+  editingRecordId=null;
+  PARAMS.forEach(p=>{
+    const input=document.getElementById('f-'+p.id);
+    if(input) input.value=(p.id==='nh3'||p.id==='no2')?'0.00':'';
+  });
+  const notes=document.getElementById('f-notes');
+  if(notes) notes.value='';
+  initDatetime();
+  updateEditingRecordBanner();
+}
+function showNewParameterRecord(){
+  showTab('add');
+  setTimeout(clearParameterFormForNewRecord,0);
+}
+function keepSavedParameterValues(entry){
+  fillParameterFormFromRecord(entry,false);
+  const notes=document.getElementById('f-notes');
+  if(notes) notes.value='';
+  initDatetime();
 }
 function syncAquariumVolumeUI(){
   const vol=Math.round((parseFloat(aquariumVolume)||380)*10)/10;
@@ -1595,20 +1986,27 @@ function renderDashboard(){
 function saveRecord(){
   const dtVal=document.getElementById('f-datetime').value;
   const entryDate=dtVal?new Date(dtVal).toISOString():new Date().toISOString();
-  const entry={id:Date.now(),date:entryDate,notes:document.getElementById('f-notes').value.trim()};
+  const entry={id:editingRecordId||Date.now(),date:entryDate,notes:document.getElementById('f-notes').value.trim()};
   let any=false;
   PARAMS.forEach(p=>{const v=document.getElementById('f-'+p.id).value;if(v!==''){entry[p.id]=parseFloat(v);any=true}});
   if(!any){showToast('⚠️ Introduce al menos un valor','#f59e0b');return}
-  records.unshift(entry);saveRec();
-  PARAMS.forEach(p=>{
-    const input=document.getElementById('f-'+p.id);
-    input.value=(p.id==='nh3'||p.id==='no2')?'0.00':'';
-  });
-  document.getElementById('f-notes').value='';
+  const wasEditing=!!editingRecordId;
+  if(editingRecordId){
+    const idx=records.findIndex(r=>r.id===editingRecordId);
+    if(idx>-1) records[idx]=entry;
+    else records.unshift(entry);
+    editingRecordId=null;
+    updateEditingRecordBanner();
+  }else{
+    records.unshift(entry);
+  }
+  records.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  saveRec();
+  keepSavedParameterValues(entry);
   renderDashboard();renderHistory();renderRecordDateHistory();
   if(chart)updateChart(activeParam);
   renderOrgs('fish');renderOrgs('coral');renderOrgs('invert');
-  showToast('✅ Medición guardada');
+  showToast(wasEditing?'✅ Registro actualizado':'✅ Medición guardada');
 }
 
 /* ── Delete record ── */
@@ -1680,7 +2078,7 @@ function renderHistory(){
     const has=counts[day]>0;
     const isToday=today.getFullYear()===year && today.getMonth()===month && today.getDate()===day;
     const title=has?`${day}/${month+1}/${year} · ${counts[day]} registro${counts[day]!==1?'s':''}`:`${day}/${month+1}/${year} · Sin registros`;
-    cells+=`<div class="record-cal-day ${has?'has-record':''} ${isToday?'today':''}" title="${title}">${day}${has?`<span class="cal-count">${counts[day]}</span>`:''}</div>`;
+    cells+=`<div class="record-cal-day ${has?'has-record':''} ${isToday?'today':''}" title="${title}" ${has?`onclick="openHistoryDayActions(${year},${month},${day})"`:''}>${day}${has?`<span class="cal-count">${counts[day]}</span>`:''}</div>`;
   }
   const title=histCalendarDate.toLocaleDateString('es-ES',{month:'long',year:'numeric'});
   const monthTotal=Object.values(counts).reduce((a,b)=>a+b,0);
@@ -1697,8 +2095,105 @@ function renderHistory(){
     <div class="record-cal-week"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
     <div class="record-cal-grid">${cells}</div>
     <div class="record-cal-legend"><span><span class="record-cal-dot"></span>Día con registro</span><span class="history-month-total">${monthTotal} registro${monthTotal!==1?'s':''} este mes</span>${filterTxt}</div>
+    <div id="history-day-actions"></div>
   `;
 }
+
+function sameRecordDay(r,year,month,day){
+  const d=new Date(r.date);
+  return d.getFullYear()===year && d.getMonth()===month && d.getDate()===day;
+}
+function openHistoryDayActions(year,month,day){
+  const panel=document.getElementById('history-day-actions');
+  if(!panel)return;
+  const dayRecords=records
+    .filter(r=>sameRecordDay(r,year,month,day))
+    .sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if(!dayRecords.length){
+    panel.innerHTML='';
+    return;
+  }
+  const selected=dayRecords[0]; // Si hay más de un registro ese día, se usa el más reciente.
+  const dateTitle=new Date(year,month,day).toLocaleDateString('es-ES',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  const extra=dayRecords.length>1?`<div class="history-action-sub">Hay ${dayRecords.length} registros ese día. Se editará o eliminará el más reciente.</div>`:'';
+  panel.innerHTML=`<div class="history-action-panel compact">
+    <div class="history-action-title">📅 ${dateTitle}</div>
+    ${extra}
+    <div class="history-record-row">
+      <div class="history-record-info"><b>Fecha seleccionada</b></div>
+      <div class="history-record-actions">
+        <button class="history-edit-btn" onclick="editRecordFromHistory(${selected.id})">✎ Editar</button>
+        <button class="history-delete-btn" onclick="askDeleteRecordFromHistory(${selected.id},${year},${month},${day})">🗑 Eliminar</button>
+      </div>
+    </div>
+  </div>`;
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function askDeleteRecordFromHistory(id,year,month,day){
+  const panel=document.getElementById('history-day-actions');
+  const r=records.find(x=>x.id===id);
+  if(!panel||!r)return;
+  const label=new Date(r.date).toLocaleDateString('es-ES',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  panel.innerHTML=`<div class="history-confirm" id="history-confirm-delete">
+    <div class="history-confirm-title">¿Eliminar el registro del ${label}?</div>
+    <div class="history-record-actions">
+      <button class="history-delete-btn" onclick="confirmDeleteRecordFromHistory(${id})">Eliminar</button>
+      <button class="history-back-btn" onclick="openHistoryDayActions(${year},${month},${day})">Atrás</button>
+    </div>
+  </div>`;
+  const confirmBox=document.getElementById('history-confirm-delete');
+  if(confirmBox)confirmBox.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function confirmDeleteRecordFromHistory(id){
+  records=records.filter(r=>r.id!==id);
+  saveRec();
+  renderDashboard();renderHistory();renderRecordDateHistory();
+  if(chart)updateChart(activeParam);
+  renderOrgs('fish');renderOrgs('coral');renderOrgs('invert');
+  showToast('🗑 Registro eliminado','#ef4444');
+}
+function toDatetimeLocalValue(dateStr){
+  const d=new Date(dateStr);
+  return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+}
+function editRecordFromHistory(id){
+  const r=records.find(x=>x.id===id);
+  if(!r)return;
+  editingRecordId=id;
+  document.getElementById('f-datetime').value=toDatetimeLocalValue(r.date);
+  PARAMS.forEach(p=>{
+    const input=document.getElementById('f-'+p.id);
+    if(input) input.value=r[p.id]!==undefined?r[p.id]:'';
+  });
+  const notes=document.getElementById('f-notes');
+  if(notes)notes.value=r.notes||'';
+  updateEditingRecordBanner(r);
+  showTab('add');
+  const target=document.getElementById('sec-add');
+  if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+  showToast('✎ Editando registro');
+}
+function cancelRecordEditMode(){
+  editingRecordId=null;
+  initDatetime();
+  loadLatestParameterValues();
+  updateEditingRecordBanner();
+}
+function updateEditingRecordBanner(record){
+  const box=document.getElementById('editing-record-banner');
+  if(!box)return;
+  if(!editingRecordId){
+    box.style.display='none';
+    box.innerHTML='';
+    return;
+  }
+  const r=record||records.find(x=>x.id===editingRecordId);
+  const label=r?new Date(r.date).toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'})+' · '+new Date(r.date).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}):'registro seleccionado';
+  box.style.display='block';
+  box.className='editing-record-banner';
+  box.innerHTML=`✎ Estás editando el registro del <b>${label}</b>. Modifica los datos y pulsa <b>Guardar medición</b>. <button class="history-back-btn" style="margin-left:8px;padding:6px 9px" onclick="cancelRecordEditMode()">Cancelar</button>`;
+}
+
 function changeHistoryCalendarMonth(delta){
   histCalendarDate=new Date(histCalendarDate.getFullYear(),histCalendarDate.getMonth()+delta,1);
   renderHistory();
@@ -1841,10 +2336,25 @@ function removeOrg(id,cat){
   const list=getList(cat),org=list.find(o=>o.id===id);
   const nombre=org?.name||'este animal';
   if(!confirm('¿Eliminar '+nombre+' de la lista?'))return;
-  if(cat==='fish')fishList=fishList.filter(o=>o.id!==id);
-  else if(cat==='coral')coralList=coralList.filter(o=>o.id!==id);
-  else invertList=invertList.filter(o=>o.id!==id);
-  saveList(cat);renderOrgs(cat);showToast('🗑 Eliminado','#ef4444');
+  const removed={...org,deletedAt:new Date().toISOString(),deletedFrom:cat};
+  if(cat==='fish'){
+    deletedFishList=[removed,...deletedFishList.filter(f=>f.id!==id)];
+    saveDeletedFish();
+    fishList=fishList.filter(o=>o.id!==id);
+  }else if(cat==='coral'){
+    deletedCoralList=[removed,...deletedCoralList.filter(c=>c.id!==id)];
+    saveDeletedCoral();
+    coralList=coralList.filter(o=>o.id!==id);
+  }else{
+    deletedInvertList=[removed,...deletedInvertList.filter(i=>i.id!==id)];
+    saveDeletedInvert();
+    invertList=invertList.filter(o=>o.id!==id);
+  }
+  saveList(cat);
+  renderOrgs(cat);
+  renderDeletedAnimalsHistory();
+  const msg=cat==='fish'?'🐟 Pez enviado a eliminados':cat==='coral'?'🪸 Coral enviado a eliminados':'🦐 Invertebrado enviado a eliminados';
+  showToast(msg,'#ef4444');
 }
 
 /* ── Add custom organism ── */
@@ -1962,6 +2472,58 @@ function exportCSV(){
   showToast('⬇ CSV exportado');
 }
 
+
+/* ── V53 · Animales eliminados recuperables ── */
+function deletedConfig(cat){
+  if(cat==='fish')return {list:deletedFishList,set:v=>deletedFishList=v,active:fishList,setActive:v=>fishList=v,saveDeleted:saveDeletedFish,saveActive:saveFish,el:'deleted-fish-history',icon:'🐟',empty:'No hay peces eliminados.',single:'Pez',prefix:'fish'};
+  if(cat==='coral')return {list:deletedCoralList,set:v=>deletedCoralList=v,active:coralList,setActive:v=>coralList=v,saveDeleted:saveDeletedCoral,saveActive:saveCoral,el:'deleted-coral-history',icon:'🪸',empty:'No hay corales eliminados.',single:'Coral',prefix:'coral'};
+  return {list:deletedInvertList,set:v=>deletedInvertList=v,active:invertList,setActive:v=>invertList=v,saveDeleted:saveDeletedInvert,saveActive:saveInvert,el:'deleted-invert-history',icon:'🦐',empty:'No hay invertebrados eliminados.',single:'Invertebrado',prefix:'invert'};
+}
+function renderDeletedAnimalHistory(cat){
+  const cfg=deletedConfig(cat);
+  const el=document.getElementById(cfg.el);
+  if(!el)return;
+  if(!cfg.list || !cfg.list.length){
+    el.innerHTML=`<div class="empty" style="padding:20px"><span class="empty-icon" style="font-size:28px">${cfg.icon}</span><p>${cfg.empty}</p></div>`;
+    return;
+  }
+  el.innerHTML=cfg.list.map(item=>{
+    const deleted=item.deletedAt?new Date(item.deletedAt).toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'}):'Fecha no disponible';
+    const img=item.img?`<img class="deleted-fish-img" src="${item.img}" alt="${item.name||cfg.single}">`:`<div class="deleted-fish-img" style="display:grid;place-items:center;font-size:24px">${cfg.icon}</div>`;
+    return `<div class="deleted-fish-row">
+      ${img}
+      <div class="deleted-fish-info">
+        <b>${item.name||cfg.single+' sin nombre'}</b>
+        <span>${item.latin||'—'} · Eliminado: ${deleted}</span>
+      </div>
+      <button class="deleted-fish-recover" onclick="recoverDeletedAnimal('${cat}','${item.id}')">↩ Recuperar</button>
+    </div>`;
+  }).join('');
+}
+function renderDeletedAnimalsHistory(){
+  renderDeletedAnimalHistory('fish');
+  renderDeletedAnimalHistory('coral');
+  renderDeletedAnimalHistory('invert');
+}
+function renderDeletedFishHistory(){renderDeletedAnimalsHistory()}
+function recoverDeletedAnimal(cat,id){
+  const cfg=deletedConfig(cat);
+  const item=cfg.list.find(x=>x.id===id);
+  if(!item)return;
+  const recovered={...item};
+  delete recovered.deletedAt;
+  delete recovered.deletedFrom;
+  if(cfg.active.some(x=>x.id===recovered.id)) recovered.id=cfg.prefix+'-'+Date.now();
+  cfg.setActive([recovered,...cfg.active]);
+  cfg.set(cfg.list.filter(x=>x.id!==id));
+  cfg.saveActive();
+  cfg.saveDeleted();
+  renderOrgs(cat);
+  renderDeletedAnimalsHistory();
+  showToast(cfg.icon+' '+cfg.single+' recuperado');
+}
+function recoverDeletedFish(id){recoverDeletedAnimal('fish',id)}
+
 /* ── Tab nav ── */
 function showTab(id){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
@@ -1972,6 +2534,7 @@ function showTab(id){
   if(id==='icp'){setICPNowIfEmpty();renderICP();}
   if(id==='tasks'){setWCNow();setResinDefaults();renderMaintenanceTasks();renderWCHistory();renderResinHistory();}
   if(id==='balling'){calcParamConsumption('kh','balling-kh-history-info','dKH');calcParamConsumption('ca','balling-ca-history-info','ppm');calcParamConsumption('mg','balling-mg-history-info','ppm');renderBallingCharts();}
+  if(id==='history')renderDeletedFishHistory();
   if(id==='fish')renderOrgs('fish');
   if(id==='coral')renderOrgs('coral');
   if(id==='invert')renderOrgs('invert');
@@ -1981,6 +2544,76 @@ function showTab(id){
 function showToast(msg,color){
   const t=document.getElementById('toast');t.textContent=msg;t.style.background=color||'#22c55e';
   t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+
+/* ── Copias de seguridad ── */
+function getBackupData(){
+  return {
+    app:'CriyodaReef',
+    version:'V46-backup',
+    createdAt:new Date().toISOString(),
+    data:{
+      [SK]:records,
+      [WK]:waterChanges,
+      [CLK]:clariseaChanges,
+      [RK]:resinChanges,
+      [ICPK]:icpRecords,
+      [TK]:maintenanceTasks,
+      [FK]:fishList,
+      [DFK]:deletedFishList,
+      [DCK]:deletedCoralList,
+      [DIK]:deletedInvertList,
+      [CK]:coralList,
+      [IK]:invertList,
+      [VK]:{volume:aquariumVolume,measures:aquariumMeasureData},
+      [RANGE_KEY]:userRanges
+    }
+  };
+}
+function exportBackup(){
+  try{
+    const backup=getBackupData();
+    const date=new Date().toISOString().slice(0,10);
+    const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=`CriyodaReef_copia_seguridad_${date}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    showToast('✅ Copia exportada');
+  }catch(e){
+    showToast('❌ Error al exportar','#ef4444');
+  }
+}
+function importBackup(event){
+  const file=event.target.files&&event.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(){
+    try{
+      const backup=JSON.parse(reader.result);
+      const data=backup.data||backup;
+      if(!data || typeof data!=='object') throw new Error('Formato no válido');
+      const ok=confirm('¿Importar esta copia de seguridad? Se sustituirán los datos actuales de CriyodaReef en este dispositivo.');
+      if(!ok){ event.target.value=''; return; }
+      const keys=[SK,WK,CLK,RK,ICPK,TK,FK,DFK,DCK,DIK,CK,IK,VK,RANGE_KEY];
+      keys.forEach(k=>{
+        if(Object.prototype.hasOwnProperty.call(data,k)){
+          localStorage.setItem(k,JSON.stringify(data[k]));
+        }
+      });
+      showToast('✅ Copia importada');
+      setTimeout(()=>location.reload(),900);
+    }catch(e){
+      showToast('❌ Archivo no válido','#ef4444');
+    }
+    event.target.value='';
+  };
+  reader.readAsText(file);
 }
 
 /* ── Datetime helpers ── */
@@ -2609,18 +3242,28 @@ function saveClariSeaChange(){
   const roll=document.getElementById('clarisea-roll')?.value.trim()||'';
   const notes=document.getElementById('clarisea-notes')?.value.trim()||'';
   if(!dtVal){showToast('⚠️ Indica la fecha del cambio','#f59e0b');return;}
-  clariseaChanges.unshift({
-    id:Date.now(),
+  const entry={
+    id:editingClariSeaId || Date.now(),
     date:new Date(dtVal).toISOString(),
     roll:roll||'ClariSea SK-3000 fleece',
     notes
-  });
+  };
+  const wasEditing=!!editingClariSeaId;
+  if(editingClariSeaId){
+    const idx=clariseaChanges.findIndex(c=>c.id===editingClariSeaId);
+    if(idx>-1) clariseaChanges[idx]=entry;
+    else clariseaChanges.unshift(entry);
+    editingClariSeaId=null;
+  }else{
+    clariseaChanges.unshift(entry);
+  }
+  clariseaChanges.sort((a,b)=>new Date(b.date)-new Date(a.date));
   saveClariSea();
   document.getElementById('clarisea-roll').value='';
   document.getElementById('clarisea-notes').value='';
   setClariSeaNow();
   renderClariSeaHistory();
-  showToast('🧻 Cambio ClariSea registrado','#0ea5e9');
+  showToast(wasEditing?'✅ Cambio ClariSea actualizado':'🧻 Cambio ClariSea registrado','#0ea5e9');
 }
 function deleteClariSeaChange(id){
   if(!confirm('¿Eliminar este cambio del ClariSea?'))return;
@@ -2650,21 +3293,117 @@ function renderClariSeaHistory(){
 
   let listHtml='<div class="empty" style="padding:20px"><span class="empty-icon" style="font-size:28px">🧻</span><p>Sin cambios del ClariSea registrados aún.</p></div>';
   if(sorted.length){
-    listHtml=sorted.map((c,i)=>{
+    if(!(clariseaCalendarDate instanceof Date) || isNaN(clariseaCalendarDate)) clariseaCalendarDate=new Date(sorted[0].date);
+    const year=clariseaCalendarDate.getFullYear();
+    const month=clariseaCalendarDate.getMonth();
+    const first=new Date(year,month,1);
+    const lastDay=new Date(year,month+1,0).getDate();
+    const mondayStart=(first.getDay()+6)%7;
+    const today=new Date();
+    const counts={};
+    sorted.forEach(c=>{
       const d=new Date(c.date);
-      const ds=d.toLocaleDateString('es-ES',{weekday:'short',day:'2-digit',month:'short',year:'numeric'})+' · '+d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
-      const next=sorted[i+1]?Math.round(Math.abs((d-new Date(sorted[i+1].date))/86400000)):null;
-      const duration=next!==null?`<span class="hist-tag">⏱ <b>${next} días</b> duró el rollo anterior</span>`:'<span class="hist-tag">Primer registro</span>';
-      const note=c.notes?`<div class="hist-note">"${c.notes}"</div>`:'';
-      return `<div class="hist-item" style="border-left:3px solid #f97316">
-        <div class="hist-date" style="display:flex;justify-content:space-between"><span>🧻 ${ds}</span></div>
-        <div class="hist-tags"><span class="hist-tag">Filtro <b>${c.roll||'ClariSea SK-3000'}</b></span>${duration}</div>
-        ${note}
-        <button class="hist-del" onclick="deleteClariSeaChange(${c.id})">✕ Eliminar</button>
-      </div>`;
-    }).join('');
+      if(d.getFullYear()===year && d.getMonth()===month){
+        counts[d.getDate()]=(counts[d.getDate()]||0)+1;
+      }
+    });
+    let cells='';
+    for(let i=0;i<mondayStart;i++) cells+='<div class="record-cal-day empty"></div>';
+    for(let day=1;day<=lastDay;day++){
+      const has=counts[day]>0;
+      const isToday=today.getFullYear()===year && today.getMonth()===month && today.getDate()===day;
+      const title=has?`${day}/${month+1}/${year} · ${counts[day]} cambio${counts[day]!==1?'s':''}`:`${day}/${month+1}/${year} · Sin cambios`;
+      cells+=`<div class="record-cal-day ${has?'has-clarisea':''} ${isToday?'today':''}" title="${title}" ${has?`onclick="openClariSeaDayActions(${year},${month},${day})"`:''}>${day}${has?`<span class="cal-count">${counts[day]}</span>`:''}</div>`;
+    }
+    const title=clariseaCalendarDate.toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+    const monthTotal=Object.values(counts).reduce((a,b)=>a+b,0);
+    listHtml=`
+      <div class="record-cal-head">
+        <button class="record-cal-btn" onclick="changeClariSeaCalendarMonth(-1)">‹</button>
+        <div class="record-cal-title">${title}</div>
+        <div class="record-cal-nav">
+          <button class="record-cal-btn" onclick="goClariSeaCalendarLatest()" title="Último cambio">↺</button>
+          <button class="record-cal-btn" onclick="changeClariSeaCalendarMonth(1)">›</button>
+        </div>
+      </div>
+      <div class="record-cal-week"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+      <div class="record-cal-grid">${cells}</div>
+      <div class="record-cal-legend"><span><span class="clarisea-cal-dot"></span>Día con cambio</span><span class="history-month-total">${monthTotal} cambio${monthTotal!==1?'s':''} este mes</span></div>
+      <div id="clarisea-day-actions"></div>
+    `;
   }
   lists.forEach(list=>list.innerHTML=listHtml);
+}
+function sameClariSeaDay(c,year,month,day){
+  const d=new Date(c.date);
+  return d.getFullYear()===year && d.getMonth()===month && d.getDate()===day;
+}
+function openClariSeaDayActions(year,month,day){
+  const panel=document.getElementById('clarisea-day-actions');
+  if(!panel)return;
+  const sorted=[...clariseaChanges].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const dayChanges=sorted.filter(c=>sameClariSeaDay(c,year,month,day));
+  if(!dayChanges.length){panel.innerHTML='';return;}
+  const selected=dayChanges[0]; // Si hay más de un cambio ese día, se usa el más reciente.
+  const dateTitle=new Date(year,month,day).toLocaleDateString('es-ES',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  const extra=dayChanges.length>1?`<div class="clarisea-action-sub">Hay ${dayChanges.length} cambios ese día. Se editará o eliminará el más reciente.</div>`:'';
+  panel.innerHTML=`<div class="clarisea-action-panel">
+    <div class="clarisea-action-title">📅 ${dateTitle}</div>
+    ${extra}
+    <div class="history-record-row">
+      <div class="history-record-info"><b>Fecha seleccionada</b></div>
+      <div class="history-record-actions">
+        <button class="history-edit-btn" onclick="editClariSeaFromHistory(${selected.id})">✎ Editar</button>
+        <button class="history-delete-btn" onclick="askDeleteClariSeaFromHistory(${selected.id},${year},${month},${day})">🗑 Eliminar</button>
+      </div>
+    </div>
+  </div>`;
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function askDeleteClariSeaFromHistory(id,year,month,day){
+  const panel=document.getElementById('clarisea-day-actions');
+  const c=clariseaChanges.find(x=>x.id===id);
+  if(!panel||!c)return;
+  const label=new Date(c.date).toLocaleDateString('es-ES',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  panel.innerHTML=`<div class="history-confirm" id="clarisea-confirm-delete">
+    <div class="history-confirm-title">¿Eliminar el cambio del ClariSea del ${label}?</div>
+    <div class="history-record-actions">
+      <button class="history-delete-btn" onclick="confirmDeleteClariSeaFromHistory(${id})">Eliminar</button>
+      <button class="history-back-btn" onclick="openClariSeaDayActions(${year},${month},${day})">Atrás</button>
+    </div>
+  </div>`;
+  const confirmBox=document.getElementById('clarisea-confirm-delete');
+  if(confirmBox)confirmBox.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function confirmDeleteClariSeaFromHistory(id){
+  clariseaChanges=clariseaChanges.filter(c=>c.id!==id);
+  saveClariSea();
+  renderClariSeaHistory();
+  showToast('🗑 Cambio ClariSea eliminado','#ef4444');
+}
+function editClariSeaFromHistory(id){
+  const c=clariseaChanges.find(x=>x.id===id);
+  if(!c)return;
+  editingClariSeaId=id;
+  const dt=document.getElementById('clarisea-datetime');
+  const roll=document.getElementById('clarisea-roll');
+  const notes=document.getElementById('clarisea-notes');
+  if(dt)dt.value=toDatetimeLocalValue(c.date);
+  if(roll)roll.value=c.roll||'';
+  if(notes)notes.value=c.notes||'';
+  showTab('tasks');
+  const form=document.getElementById('clarisea-datetime');
+  if(form)form.scrollIntoView({behavior:'smooth',block:'center'});
+  showToast('✎ Editando cambio ClariSea');
+}
+function changeClariSeaCalendarMonth(delta){
+  clariseaCalendarDate=new Date(clariseaCalendarDate.getFullYear(),clariseaCalendarDate.getMonth()+delta,1);
+  renderClariSeaHistory();
+}
+function goClariSeaCalendarLatest(){
+  const sorted=[...clariseaChanges].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if(sorted.length) clariseaCalendarDate=new Date(sorted[0].date);
+  renderClariSeaHistory();
 }
 
 
@@ -2818,6 +3557,7 @@ initAquariumVolume();
 loadRanges();
 renderRangesView();
 initDatetime();
+loadLatestParameterValues();
 setWCNow();
 setResinDefaults();
 setICPNowIfEmpty();
@@ -2830,7 +3570,7 @@ renderRecordDateHistory();
 renderMaintenanceTasks();
 renderTasksPanel();
 initHistoryFilters();
-renderDashboard();renderHistory();
+renderDashboard();renderHistory();renderDeletedFishHistory();
 ['fish','coral','invert'].forEach(c=>buildAddFields(c));
 ['fish','coral','invert'].forEach(c=>renderOrgs(c));
 </script>
@@ -2844,7 +3584,28 @@ function toggleVolumeMeasures(){
   panel.classList.toggle('open');
   if(arrow) arrow.classList.toggle('open');
 }
+
+/* ── V55 · desplegables de animales eliminados ── */
+function toggleDeletedAnimalHistory(cat){
+  const panel=document.getElementById('deleted-'+cat+'-history');
+  const arrow=document.getElementById('deleted-'+cat+'-toggle-arrow');
+  if(!panel)return;
+  panel.classList.toggle('open');
+  if(arrow)arrow.classList.toggle('open');
+}
+function toggleDeletedFishHistory(){toggleDeletedAnimalHistory('fish')}
+
 </script>
 
+  <script>
+    if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => console.log('Service Worker registrado'))
+      .catch(err => console.log('Error SW:', err));
+  });
+}
+</script>
+  
 </body>
 </html>
