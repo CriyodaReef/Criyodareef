@@ -959,6 +959,150 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
   margin-top:4px;
 }
 
+
+/* ── V59 · Botón Nuevo registro visible en Inicio móvil ── */
+.mobile-new-record-card{
+  display:none;
+}
+@media(max-width:700px){
+  #sec-dashboard .mobile-new-record-card{
+    display:block!important;
+    margin-bottom:12px!important;
+    padding:14px!important;
+  }
+  .mobile-new-record-btn{
+    width:100%;
+    border:0;
+    border-radius:18px;
+    padding:15px 16px;
+    background:linear-gradient(135deg,#0284c7,#0ea5e9 55%,#f97316);
+    box-shadow:0 12px 30px rgba(14,165,233,.25);
+    color:white;
+    font-size:16px;
+    font-weight:800;
+    font-family:var(--font);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+  }
+  .mobile-new-record-btn:active{
+    transform:scale(.98);
+  }
+  .mobile-new-record-help{
+    margin-top:8px;
+    text-align:center;
+    color:#94a3b8;
+    font-size:11px;
+    line-height:1.4;
+  }
+}
+
+
+/* ── V60 · Medidas del acuario y sump trasladadas a Gráficas ── */
+#sec-charts .volume-card{
+  margin-bottom:16px!important;
+}
+
+
+/* ── V61 · Estado general + próximas tareas automáticas ── */
+.reef-health-extra{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:14px;
+}
+.reef-health-mini{
+  border-radius:16px;
+  padding:11px 12px;
+  background:rgba(2,8,23,.34);
+  border:1px solid rgba(125,211,252,.16);
+}
+.reef-health-mini small{
+  display:block;
+  color:#94a3b8;
+  font-size:10px;
+  text-transform:uppercase;
+  font-weight:800;
+  letter-spacing:.45px;
+}
+.reef-health-mini b{
+  display:block;
+  margin-top:4px;
+  color:#fff;
+  font-size:15px;
+  font-family:var(--mono);
+}
+.task-row.auto-task{
+  border-color:rgba(14,165,233,.24)!important;
+}
+.task-row.urgent{
+  border-color:rgba(239,68,68,.42)!important;
+  background:rgba(127,29,29,.18)!important;
+}
+.task-row.today-task{
+  border-color:rgba(245,158,11,.42)!important;
+  background:rgba(120,53,15,.18)!important;
+}
+@media(max-width:700px){
+  .reef-health-extra{grid-template-columns:1fr}
+}
+
+
+/* ── V64 · Calendarios de cambios de agua y resina en Historial ── */
+.water-resin-calendars-grid{
+  margin-top:16px;
+}
+.record-cal-day.has-water{
+  background:linear-gradient(180deg,rgba(14,165,233,.22),rgba(14,165,233,.07))!important;
+  border-color:#0ea5e9!important;
+  color:#e0faff!important;
+  font-weight:800;
+}
+.record-cal-day.has-water::after{
+  content:'';position:absolute;bottom:5px;width:5px;height:5px;border-radius:50%;background:#0ea5e9;
+}
+.record-cal-day.has-resin{
+  background:linear-gradient(180deg,rgba(139,92,246,.22),rgba(139,92,246,.07))!important;
+  border-color:#8b5cf6!important;
+  color:#ede9fe!important;
+  font-weight:800;
+}
+.record-cal-day.has-resin::after{
+  content:'';position:absolute;bottom:5px;width:5px;height:5px;border-radius:50%;background:#8b5cf6;
+}
+.water-action-panel,.resin-action-panel{
+  margin-top:12px;
+  border-radius:18px;
+  padding:14px;
+  background:linear-gradient(180deg,rgba(2,8,23,.34),rgba(2,8,23,.20));
+}
+.water-action-panel{
+  border:1px solid rgba(14,165,233,.34);
+}
+.resin-action-panel{
+  border:1px solid rgba(139,92,246,.34);
+}
+.water-action-title,.resin-action-title{
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:8px;
+  text-transform:capitalize;
+}
+.water-action-title{color:#bae6fd}
+.resin-action-title{color:#ddd6fe}
+.water-action-sub,.resin-action-sub{
+  font-size:11px;
+  color:#94a3b8;
+  margin-bottom:10px;
+}
+.water-record-row,.resin-record-row{
+  padding:10px 0;
+  border-top:1px solid rgba(125,211,252,.14);
+}
+.water-record-row:first-of-type,.resin-record-row:first-of-type{border-top:0}
+
 </style>
 </head>
 <body>
@@ -996,6 +1140,11 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
 
     <!-- DASHBOARD -->
     <div class="section active" id="sec-dashboard">
+
+      <div class="card modern-card mobile-new-record-card">
+        <button class="mobile-new-record-btn" type="button" onclick="showNewParameterRecord()">⊕ Nuevo registro</button>
+        <div class="mobile-new-record-help">Pulsa aquí para ir directamente a Parámetros y añadir una nueva medición.</div>
+      </div>
       <div class="dashboard-modern">
         <div class="dash-main-col">
           <div class="card modern-card">
@@ -1006,14 +1155,21 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
               <div class="overall-copy"><small>Estado general del acuario</small><strong>Sin datos</strong><span>Añade una medición para calcular el estado.</span></div>
             </div>
           </div>
+
+          <div class="card modern-card">
+            <div class="card-title">📌 Información rápida</div>
+            <div id="reef-quick-info" class="reef-health-extra">
+              <div class="reef-health-mini"><small>Última medición</small><b id="quick-last-measure">—</b></div>
+              <div class="reef-health-mini"><small>Último ICP</small><b id="quick-last-icp">—</b></div>
+              <div class="reef-health-mini"><small>Volumen total</small><b id="quick-volume">380 L</b></div>
+            </div>
+          </div>
+
           <div class="card modern-card">
             <div class="card-title">🚨 Alertas</div>
             <div id="alerts-panel" class="alert-list"></div>
           </div>
-          <div class="card modern-card">
-            <div class="card-title">🧽 Próximas tareas</div>
-            <div id="tasks-panel" class="task-list"></div>
-          </div>
+          
         </div>
         <div class="dash-side-col">
           <div class="ranges-card modern-card">
@@ -1024,57 +1180,8 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
             <div id="ranges-view"></div>
             <div id="ranges-edit" style="display:none"></div>
           </div>
-          <div class="card modern-card volume-card volume-collapsed">
-            <div class="volume-head">
-              <div>
-                <div class="volume-title">🌊 Medidas del acuario y sump</div>
-                <div class="volume-sub">Introduce las medidas en centímetros. El resultado se envía automáticamente a Configuración general → Volumen acuario (L).</div>
-              </div>
-              <div class="volume-total-pill">
-                <small>Volumen total</small>
-                <b><span id="vol-total-main">380</span>L</b>
-              </div>
-            </div>
+          
 
-            
-        <button class="volume-toggle-btn" type="button" onclick="toggleVolumeMeasures()">
-          <span>📏 Ver medidas del acuario y sump</span>
-          <span class="volume-toggle-arrow" id="volume-toggle-arrow">⌄</span>
-        </button>
-        <div class="volume-hidden-details" id="volume-hidden-details">
-<div class="volume-grid">
-              <div class="volume-box">
-                <div class="volume-box-title">🐠 Acuario principal</div>
-                <div class="volume-fields">
-                  <div class="volume-field"><label>Largo cm</label><input type="number" id="tank-l" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
-                  <div class="volume-field"><label>Ancho cm</label><input type="number" id="tank-w" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
-                  <div class="volume-field"><label>Alto agua cm</label><input type="number" id="tank-h" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
-                </div>
-              </div>
-
-              <div class="volume-box">
-                <div class="volume-box-title">💧 Sump</div>
-                <div class="volume-fields">
-                  <div class="volume-field"><label>Largo cm</label><input type="number" id="sump-l" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
-                  <div class="volume-field"><label>Ancho cm</label><input type="number" id="sump-w" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
-                  <div class="volume-field"><label>Alto agua cm</label><input type="number" id="sump-h" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="volume-result-row">
-              <div class="volume-chip">Acuario: <b><span id="vol-tank">0</span> L</b></div>
-              <div class="volume-chip">Sump: <b><span id="vol-sump">0</span> L</b></div>
-              <div class="volume-chip">Total usado: <b><span id="vol-total-chip">380</span> L</b></div>
-            </div>
-
-            <div class="volume-actions">
-              <button class="btn-save" onclick="saveAquariumVolumeFromCalculator()">Guardar volumen calculado</button>
-              <button class="btn-outline" onclick="useDefaultVolume380()">Usar 380 L</button>
-            </div>
-        </div>
-
-          </div>
         </div>
       </div>
     </div>
@@ -1279,6 +1386,58 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
         <!-- GRÁFICAS -->
     <div class="section" id="sec-charts">
       <p class="sub">Toca un parámetro para ver su evolución</p>
+<div class="card modern-card volume-card volume-collapsed">
+            <div class="volume-head">
+              <div>
+                <div class="volume-title">🌊 Medidas del acuario y sump</div>
+                <div class="volume-sub">Introduce las medidas en centímetros. El resultado se envía automáticamente a Configuración general → Volumen acuario (L).</div>
+              </div>
+              <div class="volume-total-pill">
+                <small>Volumen total</small>
+                <b><span id="vol-total-main">380</span>L</b>
+              </div>
+            </div>
+
+            
+        <button class="volume-toggle-btn" type="button" onclick="toggleVolumeMeasures()">
+          <span>📏 Ver medidas del acuario y sump</span>
+          <span class="volume-toggle-arrow" id="volume-toggle-arrow">⌄</span>
+        </button>
+        <div class="volume-hidden-details" id="volume-hidden-details">
+<div class="volume-grid">
+              <div class="volume-box">
+                <div class="volume-box-title">🐠 Acuario principal</div>
+                <div class="volume-fields">
+                  <div class="volume-field"><label>Largo cm</label><input type="number" id="tank-l" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
+                  <div class="volume-field"><label>Ancho cm</label><input type="number" id="tank-w" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
+                  <div class="volume-field"><label>Alto agua cm</label><input type="number" id="tank-h" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
+                </div>
+              </div>
+
+              <div class="volume-box">
+                <div class="volume-box-title">💧 Sump</div>
+                <div class="volume-fields">
+                  <div class="volume-field"><label>Largo cm</label><input type="number" id="sump-l" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
+                  <div class="volume-field"><label>Ancho cm</label><input type="number" id="sump-w" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
+                  <div class="volume-field"><label>Alto agua cm</label><input type="number" id="sump-h" min="0" step="0.1" inputmode="decimal" oninput="calcAquariumVolume()"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="volume-result-row">
+              <div class="volume-chip">Acuario: <b><span id="vol-tank">0</span> L</b></div>
+              <div class="volume-chip">Sump: <b><span id="vol-sump">0</span> L</b></div>
+              <div class="volume-chip">Total usado: <b><span id="vol-total-chip">380</span> L</b></div>
+            </div>
+
+            <div class="volume-actions">
+              <button class="btn-save" onclick="saveAquariumVolumeFromCalculator()">Guardar volumen calculado</button>
+              <button class="btn-outline" onclick="useDefaultVolume380()">Usar 380 L</button>
+            </div>
+        </div>
+
+          </div>
+
       <div class="chip-row" id="chips"></div>
       <div class="chart-wrap"><canvas id="mainChart" role="img"></canvas></div>
       <div id="no-data-msg" class="empty"><span class="empty-icon">📈</span><p>Añade al menos 2 registros<br>para ver la gráfica</p></div>
@@ -1375,6 +1534,25 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
           </div>
           <div id="clarisea-history-list-charts" style="margin-top:14px">
             <div class="empty" style="padding:20px"><span class="empty-icon" style="font-size:28px">🧻</span><p>Sin cambios del ClariSea registrados aún.</p></div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="history-calendars-grid water-resin-calendars-grid">
+        <div class="card history-calendar-only history-calendar-card">
+          <div class="card-title" style="margin-bottom:12px">💧 Calendario cambios de agua</div>
+          <p class="sub">Pulsa una fecha marcada para ver los cambios de agua realizados.</p>
+          <div id="water-calendar-history">
+            <div class="empty" style="padding:20px"><span class="empty-icon" style="font-size:28px">💧</span><p>Sin cambios de agua registrados aún.</p></div>
+          </div>
+        </div>
+
+        <div class="card history-calendar-only history-calendar-card">
+          <div class="card-title" style="margin-bottom:12px">🔄 Calendario cambios de resina</div>
+          <p class="sub">Pulsa una fecha marcada para ver los cambios de resina realizados.</p>
+          <div id="resin-calendar-history">
+            <div class="empty" style="padding:20px"><span class="empty-icon" style="font-size:28px">🔄</span><p>Sin cambios de resina registrados aún.</p></div>
           </div>
         </div>
       </div>
@@ -3607,5 +3785,366 @@ function toggleDeletedFishHistory(){toggleDeletedAnimalHistory('fish')}
 }
 </script>
   
+
+<script>
+/* ── V61 · Mejoras Inicio: estado general y próximas tareas automáticas ── */
+function reefDateOnly(d){
+  const x = d instanceof Date ? new Date(d) : new Date(d);
+  x.setHours(0,0,0,0);
+  return x;
+}
+function reefDaysFrom(dateStr){
+  if(!dateStr) return null;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const d = reefDateOnly(dateStr);
+  if(isNaN(d)) return null;
+  return Math.round((d - today) / 86400000);
+}
+function reefAddDays(dateStr, days){
+  const d = reefDateOnly(dateStr);
+  if(isNaN(d)) return null;
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0,10);
+}
+function reefDueText(days){
+  if(days === null || days === undefined) return 'sin fecha';
+  if(days < 0) return 'Atrasado ' + Math.abs(days) + ' d';
+  if(days === 0) return 'Hoy';
+  if(days === 1) return 'Mañana';
+  return days + ' días';
+}
+function reefTaskClass(days){
+  if(days === null || days === undefined) return '';
+  if(days < 0) return 'urgent';
+  if(days === 0) return 'today-task';
+  return '';
+}
+function reefAutoTasks(){
+  const tasks = [];
+
+  if(waterChanges && waterChanges.length){
+    const last = [...waterChanges].sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
+    const next = reefAddDays(last.date, 7);
+    tasks.push({icon:'💧', title:'Cambio de agua', date:next, type:'auto'});
+  }else{
+    tasks.push({icon:'💧', title:'Cambio de agua', date:null, type:'auto'});
+  }
+
+  if(clariseaChanges && clariseaChanges.length){
+    const sorted = [...clariseaChanges].sort((a,b)=>new Date(b.date)-new Date(a.date));
+    let avg = 30;
+    if(sorted.length > 1){
+      const diffs = [];
+      for(let i=0;i<sorted.length-1;i++){
+        diffs.push(Math.max(1, Math.round(Math.abs((new Date(sorted[i].date)-new Date(sorted[i+1].date))/86400000))));
+      }
+      avg = Math.round(diffs.reduce((a,b)=>a+b,0)/diffs.length);
+    }
+    const next = reefAddDays(sorted[0].date, avg);
+    tasks.push({icon:'🧻', title:'Cambio ClariSea', date:next, type:'auto'});
+  }else{
+    tasks.push({icon:'🧻', title:'Cambio ClariSea', date:null, type:'auto'});
+  }
+
+  if(resinChanges && resinChanges.length){
+    const sorted = [...resinChanges].sort((a,b)=>new Date(b.date)-new Date(a.date));
+    const withNext = sorted.find(r=>r.next);
+    const next = withNext ? withNext.next : reefAddDays(sorted[0].date, 30);
+    tasks.push({icon:'🔄', title:'Cambio resina', date:next, type:'auto'});
+  }
+
+  if(icpRecords && icpRecords.length){
+    const last = [...icpRecords].sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
+    const next = reefAddDays(last.date, 60);
+    tasks.push({icon:'🧪', title:'ICP recomendado', date:next, type:'auto'});
+  }else{
+    tasks.push({icon:'🧪', title:'Primer ICP', date:null, type:'auto'});
+  }
+
+  const custom = (maintenanceTasks || [])
+    .filter(t=>!t.done)
+    .map(t=>({icon:t.icon||'🧰', title:t.title, date:t.date, type:'custom'}));
+
+  return [...tasks, ...custom]
+    .map(t=>({...t, days: reefDaysFrom(t.date)}))
+    .sort((a,b)=>{
+      if(a.days === null && b.days === null) return 0;
+      if(a.days === null) return 1;
+      if(b.days === null) return -1;
+      return a.days - b.days;
+    })
+    .slice(0,6);
+}
+
+function renderTasksPanel(){
+  const el=document.getElementById('tasks-panel'); 
+  if(!el)return;
+  const tasks = reefAutoTasks();
+  if(!tasks.length){
+    el.innerHTML='<div class="task-row"><span class="ico">🧰</span><b>Sin tareas pendientes</b><span>añade una</span></div>';
+    return;
+  }
+  el.innerHTML = tasks.map(t=>{
+    const cls = `${t.type==='auto'?'auto-task':''} ${reefTaskClass(t.days)}`;
+    const badge = t.days === null ? '<span class="maint-badge future">Configurar</span>' : `<span class="maint-badge ${t.days<0?'late':t.days===0?'today':'future'}">${reefDueText(t.days)}</span>`;
+    return `<div class="task-row ${cls}"><span class="ico">${t.icon}</span><b>${t.title}</b><span>${badge}</span></div>`;
+  }).join('');
+}
+
+function renderModernPanels(){
+  const overall=document.getElementById('overall-card');
+  const alerts=document.getElementById('alerts-panel');
+  const tasks=document.getElementById('tasks-panel');
+  if(!overall||!alerts||!tasks)return;
+
+  if(!records.length){
+    overall.className='overall-card neutral';
+    overall.innerHTML='<div class="health-ring" style="--score:0"><b>0%</b></div><div class="overall-copy"><small>Estado general del acuario</small><strong>Sin datos</strong><span>Añade una medición para calcular el estado.</span></div><div class="reef-health-extra"><div class="reef-health-mini"><small>Correctos</small><b>0</b></div><div class="reef-health-mini"><small>Revisar</small><b>0</b></div><div class="reef-health-mini"><small>Críticos</small><b>0</b></div></div>';
+    alerts.innerHTML='<div class="alert-row"><span class="ico">ℹ️</span><b>Sin alertas todavía</b><span>Añade parámetros</span></div>';
+    renderTasksPanel();
+    return;
+  }
+
+  const last=records[0];
+  const filled=PARAMS.filter(p=>last[p.id]!==undefined);
+  const scored=filled.map(p=>({p,v:last[p.id],s:getStatus(p.id,last[p.id])}));
+  const bad=scored.filter(x=>x.s==='warn'||x.s==='alert');
+  const ok=scored.filter(x=>x.s==='ok');
+  const warnCount=scored.filter(x=>x.s==='warn').length;
+  const alertCount=scored.filter(x=>x.s==='alert').length;
+  const cls=alertCount?'alert':warnCount?'warn':'ok';
+  const score=aquariumScore(filled,last);
+
+  let title='EXCELENTE';
+  let msg='Todo lo registrado está dentro del rango ideal.';
+  if(score < 75 || alertCount){title='REVISAR'; msg='Hay parámetros críticos que conviene corregir.';}
+  else if(score < 90 || warnCount){title='VIGILAR'; msg='Hay valores ligeramente fuera del rango ideal.';}
+
+  const lastDate = new Date(last.date);
+  const lastTxt = lastDate.toLocaleDateString('es-ES',{day:'2-digit',month:'short'})+' · '+lastDate.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+
+  overall.className='overall-card '+cls;
+  overall.innerHTML=`
+    <div class="health-ring" style="--score:${score}"><b>${score}%</b></div>
+    <div class="overall-copy">
+      <small>Estado general del arrecife</small>
+      <strong>${title}</strong>
+      <span>${msg}</span>
+    </div>
+    <div class="reef-health-extra">
+      <div class="reef-health-mini"><small>Correctos</small><b>${ok.length}</b></div>
+      <div class="reef-health-mini"><small>Revisar</small><b>${warnCount}</b></div>
+      <div class="reef-health-mini"><small>Último registro</small><b>${lastTxt}</b></div>
+    </div>`;
+
+  const summary=`<div class="alert-summary"><span class="alert-pill ok">✅ ${ok.length} correctos</span><span class="alert-pill warn">⚠️ ${warnCount} revisar</span><span class="alert-pill alert">🚨 ${alertCount} críticos</span></div>`;
+  if(!bad.length){
+    alerts.innerHTML=summary+'<div class="alert-row ok"><span class="ico">✅</span><b>Parámetros estables</b><span>según último registro</span></div>';
+  }else{
+    const badRows=bad.map(x=>`<div class="alert-row ${x.s}"><span class="ico">${x.s==='alert'?'🚨':'⚠️'}</span><b>${x.p.label} ${x.v<x.p.min?'bajo':'alto'}</b><span>${fmt(x.v,x.p.dec)} ${x.p.unit}</span></div>`).join('');
+    const okRows=ok.slice(0,2).map(x=>`<div class="alert-row ok"><span class="ico">✅</span><b>${x.p.label} correcta</b><span>${fmt(x.v,x.p.dec)} ${x.p.unit}</span></div>`).join('');
+    alerts.innerHTML=summary+badRows+okRows;
+  }
+
+  renderTasksPanel();
+}
+
+try{
+  renderDashboard();
+  renderTasksPanel();
+}catch(e){
+  console.warn('V61 Inicio no pudo refrescarse', e);
+}
+</script>
+
+
+<script>
+function updateQuickInfo(){
+  const m=document.getElementById('quick-last-measure');
+  const i=document.getElementById('quick-last-icp');
+  const v=document.getElementById('quick-volume');
+
+  if(m){
+    if(records && records.length){
+      const d=new Date(records[0].date);
+      m.textContent=d.toLocaleDateString('es-ES');
+    }else m.textContent='Sin datos';
+  }
+
+  if(i){
+    if(icpRecords && icpRecords.length){
+      const last=new Date(icpRecords.sort((a,b)=>new Date(b.date)-new Date(a.date))[0].date);
+      const days=Math.max(0,Math.floor((new Date()-last)/86400000));
+      i.textContent='Hace '+days+' d';
+    }else i.textContent='Sin ICP';
+  }
+
+  if(v){
+    v.textContent=(aquariumVolume||380)+' L';
+  }
+}
+setTimeout(updateQuickInfo,500);
+</script>
+
+
+<script>
+/* ── V64 · Calendarios de cambios de agua y resina ── */
+let waterCalendarDate = new Date();
+let resinCalendarDate = new Date();
+
+function v64DateKey(dateLike){
+  const d = new Date(dateLike);
+  if(isNaN(d)) return '';
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function v64MonthTitle(d){
+  return d.toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+}
+function v64BuildCalendar({containerId, recordsArr, currentDate, type, onPrev, onNext, onSelect}){
+  const el=document.getElementById(containerId);
+  if(!el)return;
+  const icon = type==='water'?'💧':'🔄';
+  const label = type==='water'?'cambios de agua':'cambios de resina';
+  const cls = type==='water'?'has-water':'has-resin';
+  const dot = type==='water'?'#0ea5e9':'#8b5cf6';
+
+  if(!recordsArr || !recordsArr.length){
+    el.innerHTML=`<div class="empty" style="padding:20px"><span class="empty-icon" style="font-size:28px">${icon}</span><p>Sin ${label} registrados aún.</p></div>`;
+    return;
+  }
+
+  const year=currentDate.getFullYear();
+  const month=currentDate.getMonth();
+  const first=new Date(year,month,1);
+  const last=new Date(year,month+1,0);
+  const startDay=(first.getDay()+6)%7;
+  const byDay={};
+  recordsArr.forEach(r=>{
+    const key=v64DateKey(r.date);
+    if(!byDay[key])byDay[key]=[];
+    byDay[key].push(r);
+  });
+
+  let html=`<div class="record-cal-head">
+    <div class="record-cal-title">${v64MonthTitle(currentDate)}</div>
+    <div class="record-cal-nav">
+      <button class="record-cal-btn" onclick="${onPrev}()">‹</button>
+      <button class="record-cal-btn" onclick="${onNext}()">›</button>
+    </div>
+  </div>
+  <div class="record-cal-week"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+  <div class="record-cal-grid">`;
+
+  for(let i=0;i<startDay;i++) html+='<div class="record-cal-day empty"></div>';
+
+  const todayKey=v64DateKey(new Date());
+  for(let day=1; day<=last.getDate(); day++){
+    const key=year+'-'+String(month+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+    const count=byDay[key]?.length||0;
+    const has=count>0;
+    html+=`<div class="record-cal-day ${has?cls:''} ${key===todayKey?'today':''}" ${has?`onclick="${onSelect}('${key}')"`:''}>
+      ${day}${count>1?`<span class="cal-count">${count}</span>`:''}
+    </div>`;
+  }
+
+  html+=`</div>
+  <div class="record-cal-legend">
+    <span><span class="record-cal-dot" style="background:${dot}"></span>Día con ${label}</span>
+    <span class="history-month-total">${recordsArr.length} registros totales</span>
+  </div>
+  <div id="${type}-calendar-action"></div>`;
+
+  el.innerHTML=html;
+}
+
+function renderWaterCalendarHistory(){
+  if(waterChanges && waterChanges.length){
+    const latest=[...waterChanges].sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
+    if(!(waterCalendarDate instanceof Date) || isNaN(waterCalendarDate)) waterCalendarDate=new Date(latest.date);
+  }
+  v64BuildCalendar({
+    containerId:'water-calendar-history',
+    recordsArr:waterChanges||[],
+    currentDate:waterCalendarDate,
+    type:'water',
+    onPrev:'prevWaterCalendarMonth',
+    onNext:'nextWaterCalendarMonth',
+    onSelect:'selectWaterCalendarDate'
+  });
+}
+function renderResinCalendarHistory(){
+  if(resinChanges && resinChanges.length){
+    const latest=[...resinChanges].sort((a,b)=>new Date(b.date)-new Date(a.date))[0];
+    if(!(resinCalendarDate instanceof Date) || isNaN(resinCalendarDate)) resinCalendarDate=new Date(latest.date);
+  }
+  v64BuildCalendar({
+    containerId:'resin-calendar-history',
+    recordsArr:resinChanges||[],
+    currentDate:resinCalendarDate,
+    type:'resin',
+    onPrev:'prevResinCalendarMonth',
+    onNext:'nextResinCalendarMonth',
+    onSelect:'selectResinCalendarDate'
+  });
+}
+function prevWaterCalendarMonth(){waterCalendarDate.setMonth(waterCalendarDate.getMonth()-1);renderWaterCalendarHistory();}
+function nextWaterCalendarMonth(){waterCalendarDate.setMonth(waterCalendarDate.getMonth()+1);renderWaterCalendarHistory();}
+function prevResinCalendarMonth(){resinCalendarDate.setMonth(resinCalendarDate.getMonth()-1);renderResinCalendarHistory();}
+function nextResinCalendarMonth(){resinCalendarDate.setMonth(resinCalendarDate.getMonth()+1);renderResinCalendarHistory();}
+
+function selectWaterCalendarDate(key){
+  const panel=document.getElementById('water-calendar-action'); if(!panel)return;
+  const items=(waterChanges||[]).filter(w=>v64DateKey(w.date)===key).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const dateTxt=new Date(key+'T12:00:00').toLocaleDateString('es-ES',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  panel.innerHTML=`<div class="water-action-panel">
+    <div class="water-action-title">💧 ${dateTxt}</div>
+    <div class="water-action-sub">${items.length} cambio(s) de agua registrado(s).</div>
+    ${items.map(w=>{
+      const d=new Date(w.date);
+      const time=d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+      const vol=w.vol?`<span class="hist-tag">💧 <b>${w.vol} L</b></span>`:'';
+      const pct=w.pct?`<span class="hist-tag">% <b>${w.pct}%</b></span>`:'';
+      const salt=w.salt?`<span class="hist-tag">🧂 <b>${w.salt}</b></span>`:'';
+      const note=w.notes?`<div class="hist-note">"${w.notes}"</div>`:'';
+      return `<div class="water-record-row"><div class="hist-date">Hora: ${time}</div><div class="hist-tags">${vol}${pct}${salt}</div>${note}</div>`;
+    }).join('')}
+  </div>`;
+}
+function selectResinCalendarDate(key){
+  const panel=document.getElementById('resin-calendar-action'); if(!panel)return;
+  const items=(resinChanges||[]).filter(r=>v64DateKey(r.date)===key).sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const dateTxt=new Date(key+'T12:00:00').toLocaleDateString('es-ES',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+  panel.innerHTML=`<div class="resin-action-panel">
+    <div class="resin-action-title">🔄 ${dateTxt}</div>
+    <div class="resin-action-sub">${items.length} cambio(s) de resina registrado(s).</div>
+    ${items.map(r=>{
+      const next=r.next?`<span class="hist-tag">📅 Próximo <b>${new Date(r.next+'T12:00:00').toLocaleDateString('es-ES')}</b></span>`:'';
+      const amount=r.amount?`<span class="hist-tag">⚖️ <b>${r.amount}</b></span>`:'';
+      const note=r.notes?`<div class="hist-note">"${r.notes}"</div>`:'';
+      return `<div class="resin-record-row"><div class="hist-tags"><span class="hist-tag">Tipo <b>${r.type}</b></span>${amount}${next}</div>${note}</div>`;
+    }).join('')}
+  </div>`;
+}
+
+/* Extender renderizados existentes para actualizar también los calendarios */
+const v64OriginalRenderWCHistory = window.renderWCHistory;
+window.renderWCHistory = function(){
+  if(typeof v64OriginalRenderWCHistory === 'function') v64OriginalRenderWCHistory();
+  renderWaterCalendarHistory();
+};
+const v64OriginalRenderResinHistory = window.renderResinHistory;
+window.renderResinHistory = function(){
+  if(typeof v64OriginalRenderResinHistory === 'function') v64OriginalRenderResinHistory();
+  renderResinCalendarHistory();
+};
+
+try{
+  renderWaterCalendarHistory();
+  renderResinCalendarHistory();
+}catch(e){
+  console.warn('V64 calendarios agua/resina no pudieron cargarse', e);
+}
+</script>
+
 </body>
 </html>
