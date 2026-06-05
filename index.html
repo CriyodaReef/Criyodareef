@@ -3614,7 +3614,10 @@ function renderMaintenanceTasks(){
   const list=document.getElementById('maintenance-list'), count=document.getElementById('task-count');
   if(!list)return;
   const ordered=[...maintenanceTasks].sort((a,b)=>Number(a.done)-Number(b.done)||new Date(a.date)-new Date(b.date));
-  count.textContent=maintenanceTasks.length===1?'1 tarea':maintenanceTasks.length+' tareas';
+  if(contador){
+  contador.textContent = maintenanceTasks.length===1
+    ? '1 tarea'
+    : maintenanceTasks.length+' tareas';
   if(!ordered.length){list.innerHTML='<div class="empty"><span class="empty-icon">🧰</span><p>No hay tareas todavía.<br>Puedes cargar las tareas base o crear una nueva.</p></div>';return;}
   list.innerHTML=ordered.map(t=>{
     const d=new Date(t.date).toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
