@@ -3613,11 +3613,8 @@ function renderTasksPanel(){
 function renderMaintenanceTasks(){
   const list=document.getElementById('maintenance-list'), count=document.getElementById('task-count');
   if(!list)return;
+  if(count){count.textContent=maintenanceTasks.length===1?'1 tarea':maintenanceTasks.length+' tareas';}
   const ordered=[...maintenanceTasks].sort((a,b)=>Number(a.done)-Number(b.done)||new Date(a.date)-new Date(b.date));
-  if(contador){
-  contador.textContent = maintenanceTasks.length===1
-    ? '1 tarea'
-    : maintenanceTasks.length+' tareas';
   if(!ordered.length){list.innerHTML='<div class="empty"><span class="empty-icon">🧰</span><p>No hay tareas todavía.<br>Puedes cargar las tareas base o crear una nueva.</p></div>';return;}
   list.innerHTML=ordered.map(t=>{
     const d=new Date(t.date).toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
@@ -4148,19 +4145,113 @@ try{
   console.warn('V64 calendarios agua/resina no pudieron cargarse', e);
 }
 </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* V68 · Conexión y sincronización básica Supabase */
 const SUPABASE_URL = 'https://rvporumccijtzinxliol.supabase.co';
-
 const SUPABASE_KEY = 'sb_publishable_zJGEWi3DfWREg8RdSS8qkg_Ht5bZtwH';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+console.log('Supabase conectado');
 
-const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+function crSyncNum(v){
+  if(v===undefined || v===null || v==='') return null;
+  const n = Number(String(v).replace(',','.'));
+  return Number.isFinite(n) ? n : null;
+}
 
-console.log("Supabase conectado");
+function crToSupabaseRow(entry){
+  return {
+    Fecha: entry.date || new Date().toISOString(),
+    Ph: crSyncNum(entry.ph),
+    Kh: crSyncNum(entry.kh),
+    Ca: crSyncNum(entry.ca),
+    Mg: crSyncNum(entry.mg),
+    No3: crSyncNum(entry.no3),
+    Po4: crSyncNum(entry.po4),
+    Sallinidad: crSyncNum(entry.sal),
+    Temperatura: crSyncNum(entry.temp),
+    Observaciones: entry.notes || ''
+  };
+}
+
+async function syncLastRecordToSupabase(entry){
+  try{
+    if(!entry || !window.supabaseClient) return;
+    const row = crToSupabaseRow(entry);
+    const { error } = await supabaseClient.from('medir').insert([row]);
+    if(error){
+      console.warn('Supabase no pudo guardar la medición:', error.message);
+      if(typeof showToast === 'function') showToast('⚠️ No se pudo sincronizar en la nube','#f59e0b');
+      return;
+    }
+    console.log('Medición sincronizada en Supabase');
+    if(typeof showToast === 'function') showToast('☁️ Sincronizado en la nube','#0ea5e9');
+  }catch(e){
+    console.warn('Error sincronizando Supabase:', e);
+  }
+}
+
+async function loadSupabaseMeasurements(){
+  try{
+    if(!window.supabaseClient || typeof records === 'undefined') return;
+    const { data, error } = await supabaseClient
+      .from('medir')
+      .select('*')
+      .order('Fecha', { ascending:false })
+      .limit(300);
+
+    if(error){
+      console.warn('Supabase no pudo cargar mediciones:', error.message);
+      return;
+    }
+    if(!Array.isArray(data) || !data.length) return;
+
+    const cloudRecords = data.map(r => ({
+      id: r.id || Date.now(),
+      date: r.Fecha || r.created_at || new Date().toISOString(),
+      temp: crSyncNum(r.Temperatura),
+      sal: crSyncNum(r.Sallinidad),
+      ph: crSyncNum(r.Ph),
+      kh: crSyncNum(r.Kh),
+      ca: crSyncNum(r.Ca),
+      mg: crSyncNum(r.Mg),
+      no3: crSyncNum(r.No3),
+      po4: crSyncNum(r.Po4),
+      notes: r.Observaciones || ''
+    })).filter(r => r.date);
+
+    const existing = new Map((records || []).map(r => [String(r.date)+'|'+String(r.ph)+'|'+String(r.kh), r]));
+    cloudRecords.forEach(r => {
+      const key = String(r.date)+'|'+String(r.ph)+'|'+String(r.kh);
+      if(!existing.has(key)) records.push(r);
+    });
+
+    records.sort((a,b)=>new Date(b.date)-new Date(a.date));
+    if(typeof saveRec === 'function') saveRec();
+    if(typeof renderDashboard === 'function') renderDashboard();
+    if(typeof renderHistory === 'function') renderHistory();
+    if(typeof renderRecordDateHistory === 'function') renderRecordDateHistory();
+    if(window.chart && typeof updateChart === 'function') updateChart(activeParam);
+    console.log('Mediciones cargadas desde Supabase');
+  }catch(e){
+    console.warn('Error cargando desde Supabase:', e);
+  }
+}
+
+setTimeout(() => {
+  if(typeof window.saveRecord === 'function' && !window.saveRecord.__supabaseWrapped){
+    const originalSaveRecord = window.saveRecord;
+    window.saveRecord = function(){
+      originalSaveRecord.apply(this, arguments);
+      const latest = Array.isArray(records) && records.length ? records[0] : null;
+      syncLastRecordToSupabase(latest);
+    };
+    window.saveRecord.__supabaseWrapped = true;
+  }
+  loadSupabaseMeasurements();
+}, 900);
 </script>
 
 </body>
