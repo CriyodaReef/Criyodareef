@@ -4145,6 +4145,20 @@ try{
   console.warn('V64 calendarios agua/resina no pudieron cargarse', e);
 }
 </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = 'https://rvporumccijtzinxliol.supabase.co';
+
+const SUPABASE_KEY = 'sb_publishable_zJGEWi3DfWREg8RdSS8qkg_Ht5bZtwH';
+
+const supabaseClient = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+console.log("Supabase conectado");
+</script>
 
 </body>
 </html>
