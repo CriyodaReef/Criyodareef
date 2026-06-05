@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icono-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icono-512.png">
 <title>🪸 CriyodaReef</title>
-<!-- V30: ICP entre Gráficas e Historial + cambios de agua y resinas en Mantenimiento -->
+<!-- V69 LIMPIO: Supabase + corrección updateQuickInfo -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -3965,22 +3965,27 @@ function updateQuickInfo(){
   const v=document.getElementById('quick-volume');
 
   if(m){
-    if(records && records.length){
+    if(typeof records !== 'undefined' && Array.isArray(records) && records.length){
       const d=new Date(records[0].date);
       m.textContent=d.toLocaleDateString('es-ES');
-    }else m.textContent='Sin datos';
+    }else{
+      m.textContent='Sin datos';
+    }
   }
 
   if(i){
-    if(icpRecords && icpRecords.length){
-      const last=new Date(icpRecords.sort((a,b)=>new Date(b.date)-new Date(a.date))[0].date);
+    if(typeof icpRecords !== 'undefined' && Array.isArray(icpRecords) && icpRecords.length){
+      const ordenados=[...icpRecords].sort((a,b)=>new Date(b.date)-new Date(a.date));
+      const last=new Date(ordenados[0].date);
       const days=Math.max(0,Math.floor((new Date()-last)/86400000));
       i.textContent='Hace '+days+' d';
-    }else i.textContent='Sin ICP';
+    }else{
+      i.textContent='Sin ICP';
+    }
   }
 
   if(v){
-    v.textContent=(aquariumVolume||380)+' L';
+    v.textContent=((typeof aquariumVolume !== 'undefined' ? aquariumVolume : 380) || 380)+' L';
   }
 }
 setTimeout(updateQuickInfo,500);
@@ -4233,7 +4238,7 @@ async function loadSupabaseMeasurements(){
     if(typeof renderDashboard === 'function') renderDashboard();
     if(typeof renderHistory === 'function') renderHistory();
     if(typeof renderRecordDateHistory === 'function') renderRecordDateHistory();
-    if(window.chart && typeof updateChart === 'function') updateChart(activeParam);
+    if(window.chart && typeof updateChart === 'function' && typeof activeParam !== 'undefined') updateChart(activeParam);
     console.log('Mediciones cargadas desde Supabase');
   }catch(e){
     console.warn('Error cargando desde Supabase:', e);
@@ -4245,7 +4250,7 @@ setTimeout(() => {
     const originalSaveRecord = window.saveRecord;
     window.saveRecord = function(){
       originalSaveRecord.apply(this, arguments);
-      const latest = Array.isArray(records) && records.length ? records[0] : null;
+      const latest = (typeof records !== 'undefined' && Array.isArray(records) && records.length) ? records[0] : null;
       syncLastRecordToSupabase(latest);
     };
     window.saveRecord.__supabaseWrapped = true;
