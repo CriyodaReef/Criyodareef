@@ -4181,7 +4181,7 @@ async function syncLastRecordToSupabase(entry){
   try{
     if(!entry || !window.supabaseClient) return;
     const row = crToSupabaseRow(entry);
-    const { error } = await supabaseClient.from('medir').insert([row]);
+    const { error } = await supabaseClient.from('mediciones').insert([row]);
     if(error){
       console.warn('Supabase no pudo guardar la medición:', error.message);
       if(typeof showToast === 'function') showToast('⚠️ No se pudo sincronizar en la nube','#f59e0b');
@@ -4198,7 +4198,7 @@ async function loadSupabaseMeasurements(){
   try{
     if(!window.supabaseClient || typeof records === 'undefined') return;
     const { data, error } = await supabaseClient
-      .from('medir')
+      .from('mediciones')
       .select('*')
       .order('Fecha', { ascending:false })
       .limit(300);
