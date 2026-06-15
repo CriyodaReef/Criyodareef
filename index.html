@@ -2184,6 +2184,7 @@ function saveRecord(){
   renderDashboard();renderHistory();renderRecordDateHistory();
   if(chart)updateChart(activeParam);
   renderOrgs('fish');renderOrgs('coral');renderOrgs('invert');
+  syncLastRecordToSupabase(entry);
   showToast(wasEditing?'✅ Registro actualizado':'✅ Medición guardada');
 }
 
