@@ -4150,10 +4150,22 @@ try{
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* V68 · Conexión y sincronización básica Supabase */
+/* V69 · Supabase estable: cliente global + tabla correcta + columnas corregidas */
 const SUPABASE_URL = 'https://rvporumccijtzinxliol.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_zJGEWi3DfWREg8RdSS8qkg_Ht5bZtwH';
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* IMPORTANTE:
+   El cliente debe estar también en window.supabaseClient.
+   Si no, la función salía sin guardar nada aunque la consola dijera "Supabase conectado".
+*/
+const supabaseClient = window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* La API ha respondido correctamente con "mediciones".
+   Dejamos "medir" como reserva por si en algún momento se renombra la tabla.
+*/
+const CR_SUPABASE_TABLES = ['mediciones', 'medir'];
+let crActiveSupabaseTable = null;
+
 console.log('Supabase conectado');
 
 function crSyncNum(v){
@@ -4167,9 +4179,12 @@ function crToSupabaseRow(entry){
     Fecha: entry.date || new Date().toISOString(),
     Ph: crSyncNum(entry.ph),
     Kh: crSyncNum(entry.kh),
-    Ca: crSyncNum(entry.ca),
+
+    /* Nombres reales de columnas vistos en Supabase */
+    Califorina: crSyncNum(entry.ca),
     Mg: crSyncNum(entry.mg),
-    No3: crSyncNum(entry.no3),
+    'N°3': crSyncNum(entry.no3),
+
     Po4: crSyncNum(entry.po4),
     Sallinidad: crSyncNum(entry.sal),
     Temperatura: crSyncNum(entry.temp),
@@ -4177,17 +4192,59 @@ function crToSupabaseRow(entry){
   };
 }
 
+function crFromSupabaseRow(r){
+  return {
+    id: r.id || r.identificacion || r.identificador || Date.now(),
+    date: r.Fecha || r.created_at || r.creado_en || new Date().toISOString(),
+    temp: crSyncNum(r.Temperatura),
+    sal: crSyncNum(r.Sallinidad),
+    ph: crSyncNum(r.Ph),
+    kh: crSyncNum(r.Kh),
+    ca: crSyncNum(r.Califorina ?? r.Ca),
+    mg: crSyncNum(r.Mg),
+    no3: crSyncNum(r['N°3'] ?? r['Nº3'] ?? r.No3),
+    po4: crSyncNum(r.Po4),
+    notes: r.Observaciones || ''
+  };
+}
+
+async function crFindWorkingSupabaseTable(){
+  if(crActiveSupabaseTable) return crActiveSupabaseTable;
+
+  for(const table of CR_SUPABASE_TABLES){
+    const { error } = await supabaseClient.from(table).select('*').limit(1);
+    if(!error){
+      crActiveSupabaseTable = table;
+      console.log('Tabla Supabase activa:', table);
+      return table;
+    }
+    console.warn('Tabla Supabase no disponible:', table, error.message);
+  }
+
+  return null;
+}
+
 async function syncLastRecordToSupabase(entry){
   try{
     if(!entry || !window.supabaseClient) return;
+
+    const table = await crFindWorkingSupabaseTable();
+    if(!table){
+      console.warn('No hay ninguna tabla Supabase disponible para sincronizar.');
+      if(typeof showToast === 'function') showToast('⚠️ No se encontró la tabla en Supabase','#f59e0b');
+      return;
+    }
+
     const row = crToSupabaseRow(entry);
-    const { error } = await supabaseClient.from('mediciones').insert([row]);
+    const { error } = await supabaseClient.from(table).insert([row]);
+
     if(error){
-      console.warn('Supabase no pudo guardar la medición:', error.message);
+      console.warn('Supabase no pudo guardar la medición:', error.message, error);
       if(typeof showToast === 'function') showToast('⚠️ No se pudo sincronizar en la nube','#f59e0b');
       return;
     }
-    console.log('Medición sincronizada en Supabase');
+
+    console.log('Medición sincronizada en Supabase:', table);
     if(typeof showToast === 'function') showToast('☁️ Sincronizado en la nube','#0ea5e9');
   }catch(e){
     console.warn('Error sincronizando Supabase:', e);
@@ -4197,60 +4254,49 @@ async function syncLastRecordToSupabase(entry){
 async function loadSupabaseMeasurements(){
   try{
     if(!window.supabaseClient || typeof records === 'undefined') return;
+
+    const table = await crFindWorkingSupabaseTable();
+    if(!table) return;
+
     const { data, error } = await supabaseClient
-      .from('mediciones')
+      .from(table)
       .select('*')
       .order('Fecha', { ascending:false })
       .limit(300);
 
     if(error){
-      console.warn('Supabase no pudo cargar mediciones:', error.message);
+      console.warn('Supabase no pudo cargar mediciones:', error.message, error);
       return;
     }
+
     if(!Array.isArray(data) || !data.length) return;
 
-    const cloudRecords = data.map(r => ({
-      id: r.id || Date.now(),
-      date: r.Fecha || r.created_at || new Date().toISOString(),
-      temp: crSyncNum(r.Temperatura),
-      sal: crSyncNum(r.Sallinidad),
-      ph: crSyncNum(r.Ph),
-      kh: crSyncNum(r.Kh),
-      ca: crSyncNum(r.Ca),
-      mg: crSyncNum(r.Mg),
-      no3: crSyncNum(r.No3),
-      po4: crSyncNum(r.Po4),
-      notes: r.Observaciones || ''
-    })).filter(r => r.date);
-
+    const cloudRecords = data.map(crFromSupabaseRow).filter(r => r.date);
     const existing = new Map((records || []).map(r => [String(r.date)+'|'+String(r.ph)+'|'+String(r.kh), r]));
+
     cloudRecords.forEach(r => {
       const key = String(r.date)+'|'+String(r.ph)+'|'+String(r.kh);
       if(!existing.has(key)) records.push(r);
     });
 
     records.sort((a,b)=>new Date(b.date)-new Date(a.date));
+
     if(typeof saveRec === 'function') saveRec();
     if(typeof renderDashboard === 'function') renderDashboard();
     if(typeof renderHistory === 'function') renderHistory();
     if(typeof renderRecordDateHistory === 'function') renderRecordDateHistory();
     if(window.chart && typeof updateChart === 'function') updateChart(activeParam);
-    console.log('Mediciones cargadas desde Supabase');
+
+    console.log('Mediciones cargadas desde Supabase:', table);
   }catch(e){
     console.warn('Error cargando desde Supabase:', e);
   }
 }
 
+/* saveRecord ya llama directamente a syncLastRecordToSupabase(entry).
+   No se envuelve otra vez para evitar registros duplicados.
+*/
 setTimeout(() => {
-  if(typeof window.saveRecord === 'function' && !window.saveRecord.__supabaseWrapped){
-    const originalSaveRecord = window.saveRecord;
-    window.saveRecord = function(){
-      originalSaveRecord.apply(this, arguments);
-      const latest = Array.isArray(records) && records.length ? records[0] : null;
-      syncLastRecordToSupabase(latest);
-    };
-    window.saveRecord.__supabaseWrapped = true;
-  }
   loadSupabaseMeasurements();
 }, 900);
 </script>
