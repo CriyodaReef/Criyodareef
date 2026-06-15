@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icono-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icono-512.png">
 <title>🪸 CriyodaReef</title>
-<!-- V70 PREMIUM: Dashboard definitivo + Supabase limpio -->
+<!-- V71 FIX REAL: Supabase mediciones + window.supabaseClient + sincronización iPhone/iPad -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -1103,111 +1103,6 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
 }
 .water-record-row:first-of-type,.resin-record-row:first-of-type{border-top:0}
 
-
-
-/* ── V70 · Dashboard premium definitivo ── */
-#sec-dashboard .v70-dashboard{
-  display:flex!important;
-  flex-direction:column!important;
-  gap:14px!important;
-  width:100%!important;
-}
-#sec-dashboard .v70-top-grid{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
-  gap:14px!important;
-  align-items:stretch!important;
-}
-#sec-dashboard .v70-card{
-  margin-bottom:0!important;
-  min-height:0!important;
-}
-#sec-dashboard .v70-status-card,
-#sec-dashboard .v70-ranges-card{
-  min-height:430px!important;
-  height:100%!important;
-  display:flex!important;
-  flex-direction:column!important;
-}
-#sec-dashboard .v70-status-card #dash-cards{
-  flex:1!important;
-}
-#sec-dashboard .v70-status-card .status-grid{
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:10px!important;
-  margin-bottom:12px!important;
-}
-#sec-dashboard .v70-status-card .status-card{
-  min-height:92px!important;
-  padding:13px 42px 13px 13px!important;
-}
-#sec-dashboard .v70-status-card .s-value{
-  font-size:25px!important;
-}
-#sec-dashboard .v70-status-card .s-label{
-  font-size:11px!important;
-}
-#sec-dashboard .v70-status-card .s-range{
-  font-size:10.5px!important;
-}
-#sec-dashboard .v70-status-card .overall-card{
-  margin-top:auto!important;
-  padding:14px!important;
-  min-height:102px!important;
-}
-#sec-dashboard .v70-status-card .health-ring{
-  width:72px!important;
-  height:72px!important;
-}
-#sec-dashboard .v70-status-card .health-ring b{
-  font-size:18px!important;
-}
-#sec-dashboard .v70-status-card .overall-copy strong{
-  font-size:22px!important;
-}
-#sec-dashboard .v70-ranges-card #ranges-view,
-#sec-dashboard .v70-ranges-card #ranges-edit{
-  flex:1!important;
-}
-#sec-dashboard .v70-ranges-card .range-row{
-  min-height:34px!important;
-  padding:6px 0!important;
-  font-size:12px!important;
-}
-#sec-dashboard .v70-alerts-card{
-  border-color:rgba(239,68,68,.26)!important;
-  background:linear-gradient(180deg,rgba(70,20,30,.55),rgba(4,16,34,.82))!important;
-}
-#sec-dashboard .v70-alerts-card .alert-list{
-  display:grid!important;
-  grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  gap:10px!important;
-}
-#sec-dashboard .v70-alerts-card .alert-row{
-  min-height:66px!important;
-  margin:0!important;
-}
-#sec-dashboard .v70-info-card .reef-health-extra{
-  grid-template-columns:repeat(3,minmax(0,1fr))!important;
-}
-@media(max-width:900px){
-  #sec-dashboard .v70-top-grid{grid-template-columns:1fr!important;}
-  #sec-dashboard .v70-status-card,#sec-dashboard .v70-ranges-card{min-height:auto!important;}
-  #sec-dashboard .v70-alerts-card .alert-list{grid-template-columns:1fr!important;}
-}
-@media(max-width:700px){
-  #sec-dashboard .v70-dashboard{gap:12px!important;display:flex!important;}
-  #sec-dashboard .v70-top-grid{gap:12px!important;}
-  #sec-dashboard .v70-status-card .status-grid{grid-template-columns:1fr 1fr!important;}
-  #sec-dashboard .v70-status-card .status-card{min-height:88px!important;padding:12px 38px 12px 12px!important;}
-  #sec-dashboard .v70-status-card .s-value{font-size:22px!important;}
-  #sec-dashboard .v70-info-card .reef-health-extra{grid-template-columns:1fr!important;}
-}
-@media(max-width:430px){
-  #sec-dashboard .v70-status-card .status-grid{grid-template-columns:1fr!important;}
-}
-
 </style>
 </head>
 <body>
@@ -1250,10 +1145,9 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
         <button class="mobile-new-record-btn" type="button" onclick="showNewParameterRecord()">⊕ Nuevo registro</button>
         <div class="mobile-new-record-help">Pulsa aquí para ir directamente a Parámetros y añadir una nueva medición.</div>
       </div>
-
-      <div class="dashboard-modern v70-dashboard">
-        <div class="v70-top-grid">
-          <div class="card modern-card v70-card v70-status-card">
+      <div class="dashboard-modern">
+        <div class="dash-main-col">
+          <div class="card modern-card">
             <div class="card-title">🐠 Estado del acuario</div>
             <div id="dash-cards"><div class="empty"><span class="empty-icon">🪸</span><p>Registra tu primera medición<br>para ver el estado del acuario</p></div></div>
             <div id="overall-card" class="overall-card neutral">
@@ -1262,7 +1156,23 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
             </div>
           </div>
 
-          <div class="ranges-card modern-card v70-card v70-ranges-card">
+          <div class="card modern-card">
+            <div class="card-title">📌 Información rápida</div>
+            <div id="reef-quick-info" class="reef-health-extra">
+              <div class="reef-health-mini"><small>Última medición</small><b id="quick-last-measure">—</b></div>
+              <div class="reef-health-mini"><small>Último ICP</small><b id="quick-last-icp">—</b></div>
+              <div class="reef-health-mini"><small>Volumen total</small><b id="quick-volume">380 L</b></div>
+            </div>
+          </div>
+
+          <div class="card modern-card">
+            <div class="card-title">🚨 Alertas</div>
+            <div id="alerts-panel" class="alert-list"></div>
+          </div>
+          
+        </div>
+        <div class="dash-side-col">
+          <div class="ranges-card modern-card">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
               <div class="ranges-title" style="margin-bottom:0">📋 Rangos ideales — marino</div>
               <button class="range-edit-btn" id="range-edit-btn" onclick="toggleRangeEdit()">✏ Editar</button>
@@ -1270,20 +1180,8 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
             <div id="ranges-view"></div>
             <div id="ranges-edit" style="display:none"></div>
           </div>
-        </div>
+          
 
-        <div class="card modern-card v70-card v70-alerts-card">
-          <div class="card-title">🚨 Alertas</div>
-          <div id="alerts-panel" class="alert-list"></div>
-        </div>
-
-        <div class="card modern-card v70-card v70-info-card">
-          <div class="card-title">📌 Información rápida</div>
-          <div id="reef-quick-info" class="reef-health-extra">
-            <div class="reef-health-mini"><small>Última medición</small><b id="quick-last-measure">—</b></div>
-            <div class="reef-health-mini"><small>Último ICP</small><b id="quick-last-icp">—</b></div>
-            <div class="reef-health-mini"><small>Volumen total</small><b id="quick-volume">380 L</b></div>
-          </div>
         </div>
       </div>
     </div>
@@ -4256,10 +4154,11 @@ try{
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* V68 · Conexión y sincronización básica Supabase */
+/* V71 · Conexión y sincronización real Supabase */
 const SUPABASE_URL = 'https://rvporumccijtzinxliol.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_zJGEWi3DfWREg8RdSS8qkg_Ht5bZtwH';
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient = window.supabaseClient;
 console.log('Supabase conectado');
 
 function crSyncNum(v){
@@ -4285,38 +4184,48 @@ function crToSupabaseRow(entry){
 
 async function syncLastRecordToSupabase(entry){
   try{
-    if(!entry || !window.supabaseClient) return;
-    const row = crToSupabaseRow(entry);
-    const { error } = await supabaseClient.from('medir').insert([row]);
-    if(error){
-      console.warn('Supabase no pudo guardar la medición:', error.message);
-      if(typeof showToast === 'function') showToast('⚠️ No se pudo sincronizar en la nube','#f59e0b');
+    if(!entry || !window.supabaseClient){
+      console.warn('Supabase no inicializado o registro vacío');
       return;
     }
-    console.log('Medición sincronizada en Supabase');
-    if(typeof showToast === 'function') showToast('☁️ Sincronizado en la nube','#0ea5e9');
+    const row = crToSupabaseRow(entry);
+
+    // Tabla real verificada en Supabase: mediciones
+    const { error } = await window.supabaseClient.from('mediciones').insert([row]);
+
+    if(error){
+      console.error('Supabase no pudo guardar la medición:', error);
+      if(typeof showToast === 'function') showToast('❌ No sincroniza: '+(error.message||'Supabase'),'#ef4444');
+      return;
+    }
+    console.log('✅ Medición sincronizada en Supabase / mediciones');
+    if(typeof showToast === 'function') showToast('☁️ Sincronizado en iPhone/iPad','#0ea5e9');
   }catch(e){
-    console.warn('Error sincronizando Supabase:', e);
+    console.error('Error sincronizando Supabase:', e);
+    if(typeof showToast === 'function') showToast('❌ Error sincronizando','#ef4444');
   }
 }
-
 async function loadSupabaseMeasurements(){
   try{
-    if(!window.supabaseClient || typeof records === 'undefined') return;
-    const { data, error } = await supabaseClient
-      .from('medir')
-      .select('*')
-      .order('Fecha', { ascending:false })
-      .limit(300);
-
-    if(error){
-      console.warn('Supabase no pudo cargar mediciones:', error.message);
+    if(!window.supabaseClient || typeof records === 'undefined'){
+      console.warn('Supabase no inicializado para cargar');
       return;
     }
-    if(!Array.isArray(data) || !data.length) return;
+    const { data, error } = await window.supabaseClient
+      .from('mediciones')
+      .select('*')
+      .order('Fecha', { ascending:false })
+      .limit(500);
+
+    if(error){
+      console.error('Supabase no pudo cargar mediciones:', error);
+      if(typeof showToast === 'function') showToast('⚠️ No carga nube: '+(error.message||'Supabase'),'#f59e0b');
+      return;
+    }
+    if(!Array.isArray(data)) return;
 
     const cloudRecords = data.map(r => ({
-      id: r.id || Date.now(),
+      id: r.id || Date.now()+Math.random(),
       date: r.Fecha || r.created_at || new Date().toISOString(),
       temp: crSyncNum(r.Temperatura),
       sal: crSyncNum(r.Sallinidad),
@@ -4329,24 +4238,31 @@ async function loadSupabaseMeasurements(){
       notes: r.Observaciones || ''
     })).filter(r => r.date);
 
-    const existing = new Map((records || []).map(r => [String(r.date)+'|'+String(r.ph)+'|'+String(r.kh), r]));
-    cloudRecords.forEach(r => {
-      const key = String(r.date)+'|'+String(r.ph)+'|'+String(r.kh);
-      if(!existing.has(key)) records.push(r);
+    // Mezcla nube + local sin duplicados, y guarda el resultado en este dispositivo
+    const merged = [];
+    const seen = new Set();
+    [...cloudRecords, ...(records||[])].forEach(r=>{
+      const key = String(r.date)+'|'+String(r.ph)+'|'+String(r.kh)+'|'+String(r.temp);
+      if(!seen.has(key)){
+        seen.add(key);
+        merged.push(r);
+      }
     });
+    merged.sort((a,b)=>new Date(b.date)-new Date(a.date));
+    records = merged;
 
-    records.sort((a,b)=>new Date(b.date)-new Date(a.date));
     if(typeof saveRec === 'function') saveRec();
     if(typeof renderDashboard === 'function') renderDashboard();
     if(typeof renderHistory === 'function') renderHistory();
     if(typeof renderRecordDateHistory === 'function') renderRecordDateHistory();
     if(window.chart && typeof updateChart === 'function' && typeof activeParam !== 'undefined') updateChart(activeParam);
-    console.log('Mediciones cargadas desde Supabase');
+
+    console.log('✅ Mediciones cargadas desde Supabase:', cloudRecords.length);
+    if(cloudRecords.length && typeof showToast === 'function') showToast('☁️ Datos cargados de la nube','#0ea5e9');
   }catch(e){
-    console.warn('Error cargando desde Supabase:', e);
+    console.error('Error cargando desde Supabase:', e);
   }
 }
-
 setTimeout(() => {
   if(typeof window.saveRecord === 'function' && !window.saveRecord.__supabaseWrapped){
     const originalSaveRecord = window.saveRecord;
@@ -4359,6 +4275,12 @@ setTimeout(() => {
   }
   loadSupabaseMeasurements();
 }, 900);
+
+// Cuando abras CriyodaReef en iPhone/iPad vuelve a cargar la nube automáticamente
+window.addEventListener('focus', () => loadSupabaseMeasurements());
+document.addEventListener('visibilitychange', () => {
+  if(!document.hidden) loadSupabaseMeasurements();
+});
 </script>
 
 </body>
