@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icono-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icono-512.png">
 <title>🪸 CriyodaReef</title>
-<!-- V30: ICP entre Gráficas e Historial + cambios de agua y resinas en Mantenimiento -->
+<!-- V70 PREMIUM: Dashboard definitivo + Supabase limpio -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -1103,6 +1103,111 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
 }
 .water-record-row:first-of-type,.resin-record-row:first-of-type{border-top:0}
 
+
+
+/* ── V70 · Dashboard premium definitivo ── */
+#sec-dashboard .v70-dashboard{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:14px!important;
+  width:100%!important;
+}
+#sec-dashboard .v70-top-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:14px!important;
+  align-items:stretch!important;
+}
+#sec-dashboard .v70-card{
+  margin-bottom:0!important;
+  min-height:0!important;
+}
+#sec-dashboard .v70-status-card,
+#sec-dashboard .v70-ranges-card{
+  min-height:430px!important;
+  height:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+#sec-dashboard .v70-status-card #dash-cards{
+  flex:1!important;
+}
+#sec-dashboard .v70-status-card .status-grid{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+  margin-bottom:12px!important;
+}
+#sec-dashboard .v70-status-card .status-card{
+  min-height:92px!important;
+  padding:13px 42px 13px 13px!important;
+}
+#sec-dashboard .v70-status-card .s-value{
+  font-size:25px!important;
+}
+#sec-dashboard .v70-status-card .s-label{
+  font-size:11px!important;
+}
+#sec-dashboard .v70-status-card .s-range{
+  font-size:10.5px!important;
+}
+#sec-dashboard .v70-status-card .overall-card{
+  margin-top:auto!important;
+  padding:14px!important;
+  min-height:102px!important;
+}
+#sec-dashboard .v70-status-card .health-ring{
+  width:72px!important;
+  height:72px!important;
+}
+#sec-dashboard .v70-status-card .health-ring b{
+  font-size:18px!important;
+}
+#sec-dashboard .v70-status-card .overall-copy strong{
+  font-size:22px!important;
+}
+#sec-dashboard .v70-ranges-card #ranges-view,
+#sec-dashboard .v70-ranges-card #ranges-edit{
+  flex:1!important;
+}
+#sec-dashboard .v70-ranges-card .range-row{
+  min-height:34px!important;
+  padding:6px 0!important;
+  font-size:12px!important;
+}
+#sec-dashboard .v70-alerts-card{
+  border-color:rgba(239,68,68,.26)!important;
+  background:linear-gradient(180deg,rgba(70,20,30,.55),rgba(4,16,34,.82))!important;
+}
+#sec-dashboard .v70-alerts-card .alert-list{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+#sec-dashboard .v70-alerts-card .alert-row{
+  min-height:66px!important;
+  margin:0!important;
+}
+#sec-dashboard .v70-info-card .reef-health-extra{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+@media(max-width:900px){
+  #sec-dashboard .v70-top-grid{grid-template-columns:1fr!important;}
+  #sec-dashboard .v70-status-card,#sec-dashboard .v70-ranges-card{min-height:auto!important;}
+  #sec-dashboard .v70-alerts-card .alert-list{grid-template-columns:1fr!important;}
+}
+@media(max-width:700px){
+  #sec-dashboard .v70-dashboard{gap:12px!important;display:flex!important;}
+  #sec-dashboard .v70-top-grid{gap:12px!important;}
+  #sec-dashboard .v70-status-card .status-grid{grid-template-columns:1fr 1fr!important;}
+  #sec-dashboard .v70-status-card .status-card{min-height:88px!important;padding:12px 38px 12px 12px!important;}
+  #sec-dashboard .v70-status-card .s-value{font-size:22px!important;}
+  #sec-dashboard .v70-info-card .reef-health-extra{grid-template-columns:1fr!important;}
+}
+@media(max-width:430px){
+  #sec-dashboard .v70-status-card .status-grid{grid-template-columns:1fr!important;}
+}
+
 </style>
 </head>
 <body>
@@ -1145,9 +1250,10 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
         <button class="mobile-new-record-btn" type="button" onclick="showNewParameterRecord()">⊕ Nuevo registro</button>
         <div class="mobile-new-record-help">Pulsa aquí para ir directamente a Parámetros y añadir una nueva medición.</div>
       </div>
-      <div class="dashboard-modern">
-        <div class="dash-main-col">
-          <div class="card modern-card">
+
+      <div class="dashboard-modern v70-dashboard">
+        <div class="v70-top-grid">
+          <div class="card modern-card v70-card v70-status-card">
             <div class="card-title">🐠 Estado del acuario</div>
             <div id="dash-cards"><div class="empty"><span class="empty-icon">🪸</span><p>Registra tu primera medición<br>para ver el estado del acuario</p></div></div>
             <div id="overall-card" class="overall-card neutral">
@@ -1156,23 +1262,7 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
             </div>
           </div>
 
-          <div class="card modern-card">
-            <div class="card-title">📌 Información rápida</div>
-            <div id="reef-quick-info" class="reef-health-extra">
-              <div class="reef-health-mini"><small>Última medición</small><b id="quick-last-measure">—</b></div>
-              <div class="reef-health-mini"><small>Último ICP</small><b id="quick-last-icp">—</b></div>
-              <div class="reef-health-mini"><small>Volumen total</small><b id="quick-volume">380 L</b></div>
-            </div>
-          </div>
-
-          <div class="card modern-card">
-            <div class="card-title">🚨 Alertas</div>
-            <div id="alerts-panel" class="alert-list"></div>
-          </div>
-          
-        </div>
-        <div class="dash-side-col">
-          <div class="ranges-card modern-card">
+          <div class="ranges-card modern-card v70-card v70-ranges-card">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
               <div class="ranges-title" style="margin-bottom:0">📋 Rangos ideales — marino</div>
               <button class="range-edit-btn" id="range-edit-btn" onclick="toggleRangeEdit()">✏ Editar</button>
@@ -1180,8 +1270,20 @@ body::after{width:280px;height:280px;right:-90px;bottom:120px;background:radial-
             <div id="ranges-view"></div>
             <div id="ranges-edit" style="display:none"></div>
           </div>
-          
+        </div>
 
+        <div class="card modern-card v70-card v70-alerts-card">
+          <div class="card-title">🚨 Alertas</div>
+          <div id="alerts-panel" class="alert-list"></div>
+        </div>
+
+        <div class="card modern-card v70-card v70-info-card">
+          <div class="card-title">📌 Información rápida</div>
+          <div id="reef-quick-info" class="reef-health-extra">
+            <div class="reef-health-mini"><small>Última medición</small><b id="quick-last-measure">—</b></div>
+            <div class="reef-health-mini"><small>Último ICP</small><b id="quick-last-icp">—</b></div>
+            <div class="reef-health-mini"><small>Volumen total</small><b id="quick-volume">380 L</b></div>
+          </div>
         </div>
       </div>
     </div>
@@ -2184,7 +2286,6 @@ function saveRecord(){
   renderDashboard();renderHistory();renderRecordDateHistory();
   if(chart)updateChart(activeParam);
   renderOrgs('fish');renderOrgs('coral');renderOrgs('invert');
-  syncLastRecordToSupabase(entry);
   showToast(wasEditing?'✅ Registro actualizado':'✅ Medición guardada');
 }
 
@@ -3966,22 +4067,27 @@ function updateQuickInfo(){
   const v=document.getElementById('quick-volume');
 
   if(m){
-    if(records && records.length){
+    if(typeof records !== 'undefined' && Array.isArray(records) && records.length){
       const d=new Date(records[0].date);
       m.textContent=d.toLocaleDateString('es-ES');
-    }else m.textContent='Sin datos';
+    }else{
+      m.textContent='Sin datos';
+    }
   }
 
   if(i){
-    if(icpRecords && icpRecords.length){
-      const last=new Date(icpRecords.sort((a,b)=>new Date(b.date)-new Date(a.date))[0].date);
+    if(typeof icpRecords !== 'undefined' && Array.isArray(icpRecords) && icpRecords.length){
+      const ordenados=[...icpRecords].sort((a,b)=>new Date(b.date)-new Date(a.date));
+      const last=new Date(ordenados[0].date);
       const days=Math.max(0,Math.floor((new Date()-last)/86400000));
       i.textContent='Hace '+days+' d';
-    }else i.textContent='Sin ICP';
+    }else{
+      i.textContent='Sin ICP';
+    }
   }
 
   if(v){
-    v.textContent=(aquariumVolume||380)+' L';
+    v.textContent=((typeof aquariumVolume !== 'undefined' ? aquariumVolume : 380) || 380)+' L';
   }
 }
 setTimeout(updateQuickInfo,500);
@@ -4150,22 +4256,10 @@ try{
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* V69 · Supabase estable: cliente global + tabla correcta + columnas corregidas */
+/* V68 · Conexión y sincronización básica Supabase */
 const SUPABASE_URL = 'https://rvporumccijtzinxliol.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_zJGEWi3DfWREg8RdSS8qkg_Ht5bZtwH';
-
-/* IMPORTANTE:
-   El cliente debe estar también en window.supabaseClient.
-   Si no, la función salía sin guardar nada aunque la consola dijera "Supabase conectado".
-*/
-const supabaseClient = window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-/* La API ha respondido correctamente con "mediciones".
-   Dejamos "medir" como reserva por si en algún momento se renombra la tabla.
-*/
-const CR_SUPABASE_TABLES = ['mediciones', 'medir'];
-let crActiveSupabaseTable = null;
-
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 console.log('Supabase conectado');
 
 function crSyncNum(v){
@@ -4179,12 +4273,9 @@ function crToSupabaseRow(entry){
     Fecha: entry.date || new Date().toISOString(),
     Ph: crSyncNum(entry.ph),
     Kh: crSyncNum(entry.kh),
-
-    /* Nombres reales de columnas vistos en Supabase */
-    Califorina: crSyncNum(entry.ca),
+    Ca: crSyncNum(entry.ca),
     Mg: crSyncNum(entry.mg),
-    'N°3': crSyncNum(entry.no3),
-
+    No3: crSyncNum(entry.no3),
     Po4: crSyncNum(entry.po4),
     Sallinidad: crSyncNum(entry.sal),
     Temperatura: crSyncNum(entry.temp),
@@ -4192,59 +4283,17 @@ function crToSupabaseRow(entry){
   };
 }
 
-function crFromSupabaseRow(r){
-  return {
-    id: r.id || r.identificacion || r.identificador || Date.now(),
-    date: r.Fecha || r.created_at || r.creado_en || new Date().toISOString(),
-    temp: crSyncNum(r.Temperatura),
-    sal: crSyncNum(r.Sallinidad),
-    ph: crSyncNum(r.Ph),
-    kh: crSyncNum(r.Kh),
-    ca: crSyncNum(r.Califorina ?? r.Ca),
-    mg: crSyncNum(r.Mg),
-    no3: crSyncNum(r['N°3'] ?? r['Nº3'] ?? r.No3),
-    po4: crSyncNum(r.Po4),
-    notes: r.Observaciones || ''
-  };
-}
-
-async function crFindWorkingSupabaseTable(){
-  if(crActiveSupabaseTable) return crActiveSupabaseTable;
-
-  for(const table of CR_SUPABASE_TABLES){
-    const { error } = await supabaseClient.from(table).select('*').limit(1);
-    if(!error){
-      crActiveSupabaseTable = table;
-      console.log('Tabla Supabase activa:', table);
-      return table;
-    }
-    console.warn('Tabla Supabase no disponible:', table, error.message);
-  }
-
-  return null;
-}
-
 async function syncLastRecordToSupabase(entry){
   try{
     if(!entry || !window.supabaseClient) return;
-
-    const table = await crFindWorkingSupabaseTable();
-    if(!table){
-      console.warn('No hay ninguna tabla Supabase disponible para sincronizar.');
-      if(typeof showToast === 'function') showToast('⚠️ No se encontró la tabla en Supabase','#f59e0b');
-      return;
-    }
-
     const row = crToSupabaseRow(entry);
-    const { error } = await supabaseClient.from(table).insert([row]);
-
+    const { error } = await supabaseClient.from('medir').insert([row]);
     if(error){
-      console.warn('Supabase no pudo guardar la medición:', error.message, error);
+      console.warn('Supabase no pudo guardar la medición:', error.message);
       if(typeof showToast === 'function') showToast('⚠️ No se pudo sincronizar en la nube','#f59e0b');
       return;
     }
-
-    console.log('Medición sincronizada en Supabase:', table);
+    console.log('Medición sincronizada en Supabase');
     if(typeof showToast === 'function') showToast('☁️ Sincronizado en la nube','#0ea5e9');
   }catch(e){
     console.warn('Error sincronizando Supabase:', e);
@@ -4254,49 +4303,60 @@ async function syncLastRecordToSupabase(entry){
 async function loadSupabaseMeasurements(){
   try{
     if(!window.supabaseClient || typeof records === 'undefined') return;
-
-    const table = await crFindWorkingSupabaseTable();
-    if(!table) return;
-
     const { data, error } = await supabaseClient
-      .from(table)
+      .from('medir')
       .select('*')
       .order('Fecha', { ascending:false })
       .limit(300);
 
     if(error){
-      console.warn('Supabase no pudo cargar mediciones:', error.message, error);
+      console.warn('Supabase no pudo cargar mediciones:', error.message);
       return;
     }
-
     if(!Array.isArray(data) || !data.length) return;
 
-    const cloudRecords = data.map(crFromSupabaseRow).filter(r => r.date);
-    const existing = new Map((records || []).map(r => [String(r.date)+'|'+String(r.ph)+'|'+String(r.kh), r]));
+    const cloudRecords = data.map(r => ({
+      id: r.id || Date.now(),
+      date: r.Fecha || r.created_at || new Date().toISOString(),
+      temp: crSyncNum(r.Temperatura),
+      sal: crSyncNum(r.Sallinidad),
+      ph: crSyncNum(r.Ph),
+      kh: crSyncNum(r.Kh),
+      ca: crSyncNum(r.Ca),
+      mg: crSyncNum(r.Mg),
+      no3: crSyncNum(r.No3),
+      po4: crSyncNum(r.Po4),
+      notes: r.Observaciones || ''
+    })).filter(r => r.date);
 
+    const existing = new Map((records || []).map(r => [String(r.date)+'|'+String(r.ph)+'|'+String(r.kh), r]));
     cloudRecords.forEach(r => {
       const key = String(r.date)+'|'+String(r.ph)+'|'+String(r.kh);
       if(!existing.has(key)) records.push(r);
     });
 
     records.sort((a,b)=>new Date(b.date)-new Date(a.date));
-
     if(typeof saveRec === 'function') saveRec();
     if(typeof renderDashboard === 'function') renderDashboard();
     if(typeof renderHistory === 'function') renderHistory();
     if(typeof renderRecordDateHistory === 'function') renderRecordDateHistory();
-    if(window.chart && typeof updateChart === 'function') updateChart(activeParam);
-
-    console.log('Mediciones cargadas desde Supabase:', table);
+    if(window.chart && typeof updateChart === 'function' && typeof activeParam !== 'undefined') updateChart(activeParam);
+    console.log('Mediciones cargadas desde Supabase');
   }catch(e){
     console.warn('Error cargando desde Supabase:', e);
   }
 }
 
-/* saveRecord ya llama directamente a syncLastRecordToSupabase(entry).
-   No se envuelve otra vez para evitar registros duplicados.
-*/
 setTimeout(() => {
+  if(typeof window.saveRecord === 'function' && !window.saveRecord.__supabaseWrapped){
+    const originalSaveRecord = window.saveRecord;
+    window.saveRecord = function(){
+      originalSaveRecord.apply(this, arguments);
+      const latest = (typeof records !== 'undefined' && Array.isArray(records) && records.length) ? records[0] : null;
+      syncLastRecordToSupabase(latest);
+    };
+    window.saveRecord.__supabaseWrapped = true;
+  }
   loadSupabaseMeasurements();
 }, 900);
 </script>
