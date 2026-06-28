@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icono-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icono-512.png">
 <title>🪸 CriyodaReef</title>
-<!-- V71 FIX REAL: Supabase mediciones + window.supabaseClient + sincronización iPhone/iPad -->
+<!-- V72 FIREBASE: mediciones en Firestore + sincronización PC/iPhone/iPad -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -4152,136 +4152,10 @@ try{
 </script>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-/* V71 · Conexión y sincronización real Supabase */
-const SUPABASE_URL = 'https://rvporumccijtzinxliol.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_zJGEWi3DfWREg8RdSS8qkg_Ht5bZtwH';
-window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-const supabaseClient = window.supabaseClient;
-console.log('Supabase conectado');
-
-function crSyncNum(v){
-  if(v===undefined || v===null || v==='') return null;
-  const n = Number(String(v).replace(',','.'));
-  return Number.isFinite(n) ? n : null;
-}
-
-function crToSupabaseRow(entry){
-  return {
-    Fecha: entry.date || new Date().toISOString(),
-    Ph: crSyncNum(entry.ph),
-    Kh: crSyncNum(entry.kh),
-    Ca: crSyncNum(entry.ca),
-    Mg: crSyncNum(entry.mg),
-    No3: crSyncNum(entry.no3),
-    Po4: crSyncNum(entry.po4),
-    Sallinidad: crSyncNum(entry.sal),
-    Temperatura: crSyncNum(entry.temp),
-    Observaciones: entry.notes || ''
-  };
-}
-
-async function syncLastRecordToSupabase(entry){
-  try{
-    if(!entry || !window.supabaseClient){
-      console.warn('Supabase no inicializado o registro vacío');
-      return;
-    }
-    const row = crToSupabaseRow(entry);
-
-    // Tabla real verificada en Supabase: mediciones
-    const { error } = await window.supabaseClient.from('mediciones').insert([row]);
-
-    if(error){
-      console.error('Supabase no pudo guardar la medición:', error);
-      if(typeof showToast === 'function') showToast('❌ No sincroniza: '+(error.message||'Supabase'),'#ef4444');
-      return;
-    }
-    console.log('✅ Medición sincronizada en Supabase / mediciones');
-    if(typeof showToast === 'function') showToast('☁️ Sincronizado en iPhone/iPad','#0ea5e9');
-  }catch(e){
-    console.error('Error sincronizando Supabase:', e);
-    if(typeof showToast === 'function') showToast('❌ Error sincronizando','#ef4444');
-  }
-}
-async function loadSupabaseMeasurements(){
-  try{
-    if(!window.supabaseClient || typeof records === 'undefined'){
-      console.warn('Supabase no inicializado para cargar');
-      return;
-    }
-    const { data, error } = await window.supabaseClient
-      .from('mediciones')
-      .select('*')
-      .order('Fecha', { ascending:false })
-      .limit(500);
-
-    if(error){
-      console.error('Supabase no pudo cargar mediciones:', error);
-      if(typeof showToast === 'function') showToast('⚠️ No carga nube: '+(error.message||'Supabase'),'#f59e0b');
-      return;
-    }
-    if(!Array.isArray(data)) return;
-
-    const cloudRecords = data.map(r => ({
-      id: r.id || Date.now()+Math.random(),
-      date: r.Fecha || r.created_at || new Date().toISOString(),
-      temp: crSyncNum(r.Temperatura),
-      sal: crSyncNum(r.Sallinidad),
-      ph: crSyncNum(r.Ph),
-      kh: crSyncNum(r.Kh),
-      ca: crSyncNum(r.Ca),
-      mg: crSyncNum(r.Mg),
-      no3: crSyncNum(r.No3),
-      po4: crSyncNum(r.Po4),
-      notes: r.Observaciones || ''
-    })).filter(r => r.date);
-
-    // Mezcla nube + local sin duplicados, y guarda el resultado en este dispositivo
-    const merged = [];
-    const seen = new Set();
-    [...cloudRecords, ...(records||[])].forEach(r=>{
-      const key = String(r.date)+'|'+String(r.ph)+'|'+String(r.kh)+'|'+String(r.temp);
-      if(!seen.has(key)){
-        seen.add(key);
-        merged.push(r);
-      }
-    });
-    merged.sort((a,b)=>new Date(b.date)-new Date(a.date));
-    records = merged;
-
-    if(typeof saveRec === 'function') saveRec();
-    if(typeof renderDashboard === 'function') renderDashboard();
-    if(typeof renderHistory === 'function') renderHistory();
-    if(typeof renderRecordDateHistory === 'function') renderRecordDateHistory();
-    if(window.chart && typeof updateChart === 'function' && typeof activeParam !== 'undefined') updateChart(activeParam);
-
-    console.log('✅ Mediciones cargadas desde Supabase:', cloudRecords.length);
-    if(cloudRecords.length && typeof showToast === 'function') showToast('☁️ Datos cargados de la nube','#0ea5e9');
-  }catch(e){
-    console.error('Error cargando desde Supabase:', e);
-  }
-}
-setTimeout(() => {
-  if(typeof window.saveRecord === 'function' && !window.saveRecord.__supabaseWrapped){
-    const originalSaveRecord = window.saveRecord;
-    window.saveRecord = function(){
-      originalSaveRecord.apply(this, arguments);
-      const latest = (typeof records !== 'undefined' && Array.isArray(records) && records.length) ? records[0] : null;
-      syncLastRecordToSupabase(latest);
-    };
-    window.saveRecord.__supabaseWrapped = true;
-  }
-  loadSupabaseMeasurements();
-}, 900);
-
-// Cuando abras CriyodaReef en iPhone/iPad vuelve a cargar la nube automáticamente
-window.addEventListener('focus', () => loadSupabaseMeasurements());
-document.addEventListener('visibilitychange', () => {
-  if(!document.hidden) loadSupabaseMeasurements();
-});
-</script>
+<!-- V72 · Sincronización Firebase Firestore: mediciones PC/iPhone/iPad -->
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 
 </body>
 </html>
